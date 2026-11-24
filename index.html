@@ -5,6 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NORTHLINE — Clarity for what comes next.</title>
   <meta name="description" content="NORTHLINE is an international consulting agency delivering clarity, strategy, and transformation for forward-thinking organisations.">
+  
+  <!-- Prevent Theme Flash (FOUC) -->
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('northline-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {}
+    })();
+  </script>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -18,9 +30,9 @@
   <!-- ====================================================================
        NAVIGATION
        ==================================================================== -->
-  <header class="nav" role="banner">
+  <header class="nav" id="mainNav" role="banner">
     <div class="nav__inner">
-      <a href="#" class="nav__logo" aria-label="NORTHLINE Home">
+      <a href="#hero" class="nav__logo" aria-label="NORTHLINE Home">
         <svg class="nav__logo-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
           <rect width="9" height="9" fill="currentColor"/>
           <rect x="11" width="9" height="9" fill="currentColor"/>
@@ -30,10 +42,10 @@
       </a>
 
       <nav class="nav__menu" aria-label="Main navigation">
-        <a href="#expertise" class="nav__link">Expertise</a>
-        <a href="#work" class="nav__link">Work</a>
-        <a href="#about" class="nav__link">About</a>
-        <a href="#contact" class="nav__link">Contact</a>
+        <a href="#expertise" class="nav__link" data-nav-link>Expertise</a>
+        <a href="#work" class="nav__link" data-nav-link>Work</a>
+        <a href="#about" class="nav__link" data-nav-link>About</a>
+        <a href="#contact" class="nav__link" data-nav-link>Contact</a>
       </nav>
 
       <div class="nav__right">
@@ -74,35 +86,37 @@
     <!-- ==================================================================
          HERO
          ================================================================== -->
-    <section class="hero">
+    <section class="hero" id="hero">
       <div class="hero__grid">
         <!-- Left: text -->
         <div class="hero__content">
-          <span class="hero__eyebrow reveal" data-reveal>International Consulting &amp; Advisory</span>
+          <span class="hero__eyebrow hero-reveal" data-hero-delay="0">International Consulting &amp; Advisory</span>
           <h1 class="hero__headline">
-            <span class="hero__headline-line reveal" data-reveal data-delay="1">Clarity for</span>
-            <span class="hero__headline-line reveal" data-reveal data-delay="2">what comes</span>
-            <span class="hero__headline-line hero__headline-line--accent reveal" data-reveal data-delay="3">next<span class="dot">.</span></span>
+            <span class="hero__headline-wrapper"><span class="hero__headline-line hero-reveal" data-hero-delay="1">Clarity for</span></span>
+            <span class="hero__headline-wrapper"><span class="hero__headline-line hero-reveal" data-hero-delay="2">what comes</span></span>
+            <span class="hero__headline-wrapper"><span class="hero__headline-line hero__headline-line--accent hero-reveal" data-hero-delay="3">next<span class="dot">.</span></span></span>
           </h1>
-          <p class="hero__sub reveal" data-reveal data-delay="4">
+          <p class="hero__sub hero-reveal" data-hero-delay="4">
             We partner with ambitious organisations to navigate complexity,
             unlock growth, and build what the future demands.
           </p>
-          <div class="hero__actions reveal" data-reveal data-delay="5">
-            <a href="#contact" class="btn btn--primary">Start a conversation</a>
-            <a href="#work" class="btn btn--outline">View our work</a>
+          <div class="hero__actions hero-reveal" data-hero-delay="5">
+            <a href="#contact" class="btn btn--primary magnetic-btn" data-magnetic><span class="btn__text">Start a conversation</span></a>
+            <a href="#work" class="btn btn--outline magnetic-btn" data-magnetic><span class="btn__text">View our work</span></a>
           </div>
         </div>
 
         <!-- Right: geometric visual -->
-        <div class="hero__visual" aria-hidden="true">
+        <div class="hero__visual" id="heroVisualContainer" aria-hidden="true">
           <canvas id="heroCanvas"></canvas>
         </div>
       </div>
 
-      <div class="hero__bottom reveal" data-reveal data-delay="6">
-        <span class="hero__scroll-line" aria-hidden="true"></span>
-        <span class="hero__scroll-label">Scroll to explore</span>
+      <div class="hero__bottom hero-reveal" data-hero-delay="6">
+        <a href="#intro" class="hero__scroll-link" aria-label="Scroll to exploration">
+          <span class="hero__scroll-line" aria-hidden="true"></span>
+          <span class="hero__scroll-label">Scroll to explore</span>
+        </a>
       </div>
     </section>
 
@@ -110,7 +124,7 @@
     <!-- ==================================================================
          INTRO
          ================================================================== -->
-    <section class="intro">
+    <section class="intro" id="intro">
       <div class="intro__inner">
         <div class="intro__col-label">
           <span class="section-label reveal" data-reveal>Who we are</span>
@@ -142,7 +156,7 @@
         </header>
 
         <div class="expertise__grid">
-          <article class="expertise__card reveal" data-reveal>
+          <article class="expertise__card reveal" data-reveal data-stagger="0">
             <span class="expertise__index">01</span>
             <h3 class="expertise__title">Corporate Strategy</h3>
             <p class="expertise__desc">
@@ -157,7 +171,7 @@
             </ul>
           </article>
 
-          <article class="expertise__card reveal" data-reveal data-delay="1">
+          <article class="expertise__card reveal" data-reveal data-stagger="1">
             <span class="expertise__index">02</span>
             <h3 class="expertise__title">Digital Transformation</h3>
             <p class="expertise__desc">
@@ -171,7 +185,7 @@
             </ul>
           </article>
 
-          <article class="expertise__card reveal" data-reveal data-delay="2">
+          <article class="expertise__card reveal" data-reveal data-stagger="2">
             <span class="expertise__index">03</span>
             <h3 class="expertise__title">Operations Excellence</h3>
             <p class="expertise__desc">
@@ -185,7 +199,7 @@
             </ul>
           </article>
 
-          <article class="expertise__card reveal" data-reveal data-delay="3">
+          <article class="expertise__card reveal" data-reveal data-stagger="3">
             <span class="expertise__index">04</span>
             <h3 class="expertise__title">Organisation Design</h3>
             <p class="expertise__desc">
@@ -217,9 +231,9 @@
 
         <div class="work__list">
           <!-- Project 1 -->
-          <article class="work__item reveal" data-reveal>
+          <article class="work__item reveal" data-reveal data-parallax-item>
             <div class="work__item-visual work__item-visual--1">
-              <div class="work__shape"></div>
+              <div class="work__shape" data-parallax-shape></div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
@@ -232,16 +246,16 @@
                 delivering €240 M in projected revenue within 36 months.
               </p>
               <a href="#" class="work__link">
-                Read case study
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+                <span class="work__link-text">Read case study</span>
+                <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
           </article>
 
           <!-- Project 2 -->
-          <article class="work__item work__item--reverse reveal" data-reveal data-delay="1">
+          <article class="work__item work__item--reverse reveal" data-reveal data-delay="1" data-parallax-item>
             <div class="work__item-visual work__item-visual--2">
-              <div class="work__shape"></div>
+              <div class="work__shape" data-parallax-shape></div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
@@ -254,16 +268,16 @@
                 operational costs by 34 % and improving throughput by 2.8×.
               </p>
               <a href="#" class="work__link">
-                Read case study
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+                <span class="work__link-text">Read case study</span>
+                <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
           </article>
 
           <!-- Project 3 -->
-          <article class="work__item reveal" data-reveal data-delay="2">
+          <article class="work__item reveal" data-reveal data-delay="2" data-parallax-item>
             <div class="work__item-visual work__item-visual--3">
-              <div class="work__shape"></div>
+              <div class="work__shape" data-parallax-shape></div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
@@ -276,8 +290,8 @@
                 decision velocity by 60 % and saving $18 M annually.
               </p>
               <a href="#" class="work__link">
-                Read case study
-                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+                <span class="work__link-text">Read case study</span>
+                <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
           </article>
@@ -298,19 +312,19 @@
           </p>
         </div>
         <div class="stats__grid">
-          <div class="stats__item reveal" data-reveal>
+          <div class="stats__item reveal" data-reveal data-stagger="0">
             <span class="stats__number" data-count="140">0</span><span class="stats__suffix">+</span>
             <span class="stats__label">Projects delivered across<br>12 global markets</span>
           </div>
-          <div class="stats__item reveal" data-reveal data-delay="1">
+          <div class="stats__item reveal" data-reveal data-delay="1" data-stagger="1">
             <span class="stats__number" data-count="96">0</span><span class="stats__suffix">%</span>
             <span class="stats__label">Client retention rate<br>year over year</span>
           </div>
-          <div class="stats__item reveal" data-reveal data-delay="2">
+          <div class="stats__item reveal" data-reveal data-delay="2" data-stagger="2">
             <span class="stats__number" data-count="4">0</span><span class="stats__suffix">.2×</span>
             <span class="stats__label">Average return on<br>engagement investment</span>
           </div>
-          <div class="stats__item reveal" data-reveal data-delay="3">
+          <div class="stats__item reveal" data-reveal data-delay="3" data-stagger="3">
             <span class="stats__number" data-count="38">0</span>
             <span class="stats__label">Senior consultants and<br>domain specialists</span>
           </div>
@@ -397,7 +411,7 @@
           the conversation.
         </p>
         <div class="contact__cta reveal" data-reveal data-delay="3">
-          <a href="mailto:hello@northline.co" class="btn btn--primary btn--lg">hello@northline.co</a>
+          <a href="mailto:hello@northline.co" class="btn btn--primary btn--lg magnetic-btn" data-magnetic><span class="btn__text">hello@northline.co</span></a>
         </div>
         <div class="contact__offices reveal" data-reveal data-delay="4">
           <div class="contact__office">
@@ -426,7 +440,7 @@
     <div class="footer__inner">
       <div class="footer__top">
         <div class="footer__brand">
-          <a href="#" class="nav__logo" aria-label="NORTHLINE Home">
+          <a href="#hero" class="nav__logo" aria-label="NORTHLINE Home">
             <svg class="nav__logo-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
               <rect width="9" height="9" fill="currentColor"/>
               <rect x="11" width="9" height="9" fill="currentColor"/>

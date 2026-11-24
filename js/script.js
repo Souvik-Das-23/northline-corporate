@@ -1,13 +1,13 @@
 /* ==========================================================================
-   NORTHLINE — Interactions & Motion
-   Vanilla JS · Zero dependencies
+   NORTHLINE — Advanced Interaction & Motion Design System
+   Vanilla JS · Zero dependencies · High Performance
    ========================================================================== */
 
 (function () {
   'use strict';
 
   /* -----------------------------------------------------------------------
-     Helpers
+     Helpers & Accessibility
      ----------------------------------------------------------------------- */
   const html  = document.documentElement;
   const body  = document.body;
@@ -18,69 +18,208 @@
 
 
   /* -----------------------------------------------------------------------
-     1. Theme
+     1. Page Load Staggered Hero Reveal
+     ----------------------------------------------------------------------- */
+  function triggerHeroLoad() {
+    requestAnimationFrame(() => {
+      body.classList.add('is-loaded');
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', triggerHeroLoad);
+  } else {
+    triggerHeroLoad();
+  }
+
+
+  /* -----------------------------------------------------------------------
+     2. Theme Management (Zero-Flash & Synchronous Persistence)
      ----------------------------------------------------------------------- */
   const THEME_KEY = 'northline-theme';
-  const toggle    = qs('#themeToggle');
+  const toggleBtn = qs('#themeToggle');
 
-  function setTheme(t) {
-    html.setAttribute('data-theme', t);
-    localStorage.setItem(THEME_KEY, t);
+  function setTheme(theme) {
+    html.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem(THEME_KEY, theme);
+    } catch (e) {}
   }
 
-  // Init
-  (function () {
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored) return setTheme(stored);
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) setTheme('dark');
-  })();
-
-  toggle.addEventListener('click', () => {
-    setTheme(html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
-  });
+  if (toggleBtn) {
+    toggleBtn.addEventListener('click', () => {
+      const current = html.getAttribute('data-theme') || 'light';
+      const next = current === 'dark' ? 'light' : 'dark';
+      setTheme(next);
+    });
+  }
 
 
   /* -----------------------------------------------------------------------
-     2. Scroll Progress
+     3. Refined Scroll Progress Indicator & Nav Scrolled State
      ----------------------------------------------------------------------- */
+  const nav         = qs('#mainNav');
   const progressBar = qs('.scroll-progress__bar');
+  const heroVisual  = qs('#heroVisualContainer');
 
-  function updateProgress() {
-    const h = document.documentElement.scrollHeight - window.innerHeight;
-    progressBar.style.width = h > 0 ? (window.scrollY / h * 100) + '%' : '0%';
+  function updateScrollProgress() {
+    const scrollY   = window.scrollY;
+    const docHeight = html.scrollHeight - window.innerHeight;
+    
+    // Scroll progress bar
+    if (progressBar) {
+      const pct = docHeight > 0 ? (scrollY / docHeight) * 100 : 0;
+      progressBar.style.width = pct + '%';
+    }
+
+    // Nav frosted backdrop on scroll
+    if (nav) {
+      if (scrollY > 24) {
+        nav.classList.add('nav--scrolled');
+      } else {
+        nav.classList.remove('nav--scrolled');
+      }
+    }
+
+    // Subtle Hero scroll parallax & fade
+    if (heroVisual && motionOk()) {
+      if (scrollY < window.innerHeight) {
+        const offset = scrollY * 0.15;
+        const opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.9));
+        heroVisual.style.transform = `translate3d(0, ${offset}px, 0)`;
+        heroVisual.style.opacity = opacity;
+      }
+    }
+
+    // Work item visual parallax on scroll
+    if (motionOk()) {
+      updateWorkParallax();
+    }
   }
 
 
   /* -----------------------------------------------------------------------
-     3. Reveal on Scroll
+     4. Active Navigation Indicator via Scroll Spy
+     ----------------------------------------------------------------------- */
+  const navLinks = qsa('[data-nav-link]');
+  const trackedSections = qsa('section[id]');
+
+  function updateActiveNav() {
+    const scrollPos = window.scrollY + 120;
+
+    let currentSectionId = '';
+    trackedSections.forEach(sec => {
+      const top = sec.offsetTop;
+      const height = sec.offsetHeight;
+      if (scrollPos >= top && scrollPos < top + height) {
+        currentSectionId = sec.getAttribute('id');
+      }
+    });
+
+    navLinks.forEach(link => {
+      const href = link.getAttribute('href');
+      if (href === '#' + currentSectionId) {
+        link.classList.add('is-active');
+      } else {
+        link.classList.remove('is-active');
+      }
+    });
+  }
+
+
+  /* -----------------------------------------------------------------------
+     5. Work Item Scroll Parallax
+     ----------------------------------------------------------------------- */
+  const parallaxItems = qsa('[data-parallax-item]');
+
+  function updateWorkParallax() {
+    const windowH = window.innerHeight;
+    parallaxItems.forEach(item => {
+      const rect = item.getBoundingClientRect();
+      if (rect.top < windowH && rect.bottom > 0) {
+        const shape = qs('[data-parallax-shape]', item);
+        if (shape) {
+          const centerDelta = (rect.top + rect.height / 2) - (windowH / 2);
+          const moveY = (centerDelta / windowH) * -16;
+          shape.style.transform = `translate3d(0, ${moveY.toFixed(1)}px, 0)`;
+        }
+      }
+    });
+  }
+
+
+  /* -----------------------------------------------------------------------
+     6. Magnetic CTA Buttons
+     ----------------------------------------------------------------------- */
+  const magneticButtons = qsa('[data-magnetic]');
+
+  if (motionOk()) {
+    magneticButtons.forEach(btn => {
+      const text = qs('.btn__text', btn);
+
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const x = e.clientX - (rect.left + rect.width / 2);
+        const y = e.clientY - (rect.top + rect.height / 2);
+
+        // Subtle pull: button container moves up to ±5px, text moves ±2px
+        btn.style.transform = `translate3d(${x * 0.18}px, ${y * 0.18}px, 0)`;
+        if (text) {
+          text.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
+        }
+      });
+
+      btn.addEventListener('mouseleave', () => {
+        btn.style.transition = 'transform .45s cubic-bezier(.34, 1.56, .64, 1)';
+        btn.style.transform = 'translate3d(0, 0, 0)';
+        if (text) {
+          text.style.transition = 'transform .45s cubic-bezier(.34, 1.56, .64, 1)';
+          text.style.transform = 'translate3d(0, 0, 0)';
+        }
+
+        // Clean up transition after spring completes
+        setTimeout(() => {
+          btn.style.transition = '';
+          if (text) text.style.transition = '';
+        }, 450);
+      });
+    });
+  }
+
+
+  /* -----------------------------------------------------------------------
+     7. Scroll-Triggered Reveal Animations
      ----------------------------------------------------------------------- */
   const reveals = qsa('[data-reveal]');
 
   if ('IntersectionObserver' in window && motionOk()) {
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          e.target.classList.add('is-visible');
-          io.unobserve(e.target);
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.10, rootMargin: '0px 0px -50px 0px' });
+    }, {
+      threshold: 0.12,
+      rootMargin: '0px 0px -40px 0px'
+    });
 
-    reveals.forEach(el => io.observe(el));
+    reveals.forEach(el => revealObserver.observe(el));
   } else {
     reveals.forEach(el => el.classList.add('is-visible'));
   }
 
 
   /* -----------------------------------------------------------------------
-     4. Animated Counters
+     8. Animated Numbers (Statistics Count-Up)
      ----------------------------------------------------------------------- */
   const counters = qsa('[data-count]');
-  let countersRan = false;
+  let countersAnimated = false;
 
-  function runCounters() {
-    if (countersRan) return;
-    countersRan = true;
+  function animateCounters() {
+    if (countersAnimated) return;
+    countersAnimated = true;
 
     if (!motionOk()) {
       counters.forEach(el => { el.textContent = el.dataset.count; });
@@ -92,32 +231,40 @@
       const duration = 1800;
       const start    = performance.now();
 
-      (function step(now) {
-        const p = Math.min((now - start) / duration, 1);
-        const ease = 1 - Math.pow(1 - p, 3);           // ease-out cubic
+      function step(now) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        // ease-out cubic
+        const ease = 1 - Math.pow(1 - progress, 3);
         el.textContent = Math.round(ease * target);
-        if (p < 1) requestAnimationFrame(step);
-      })(start);
+        if (progress < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
     });
   }
 
-  const statsEl = qs('#stats');
-  if (statsEl && 'IntersectionObserver' in window) {
-    const cio = new IntersectionObserver(entries => {
-      if (entries[0].isIntersecting) { runCounters(); cio.disconnect(); }
+  const statsSection = qs('#stats');
+  if (statsSection && 'IntersectionObserver' in window) {
+    const statsObserver = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        animateCounters();
+        statsObserver.disconnect();
+      }
     }, { threshold: 0.25 });
-    cio.observe(statsEl);
+    statsObserver.observe(statsSection);
+  } else {
+    animateCounters();
   }
 
 
   /* -----------------------------------------------------------------------
-     5. Mobile Menu
+     9. Responsive Mobile Menu
      ----------------------------------------------------------------------- */
-  const burger     = qs('#navBurger');
-  const mobileMenu = qs('#mobileMenu');
+  const burger      = qs('#navBurger');
+  const mobileMenu  = qs('#mobileMenu');
   const mobileLinks = qsa('[data-mobile-link]');
 
-  function openMenu() {
+  function openMobileMenu() {
     burger.classList.add('is-active');
     burger.setAttribute('aria-expanded', 'true');
     burger.setAttribute('aria-label', 'Close menu');
@@ -126,7 +273,7 @@
     body.style.overflow = 'hidden';
   }
 
-  function closeMenu() {
+  function closeMobileMenu() {
     burger.classList.remove('is-active');
     burger.setAttribute('aria-expanded', 'false');
     burger.setAttribute('aria-label', 'Open menu');
@@ -135,50 +282,60 @@
     body.style.overflow = '';
   }
 
-  burger.addEventListener('click', () =>
-    mobileMenu.classList.contains('is-open') ? closeMenu() : openMenu()
-  );
+  if (burger && mobileMenu) {
+    burger.addEventListener('click', () => {
+      mobileMenu.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
+    });
 
-  mobileLinks.forEach(a => a.addEventListener('click', closeMenu));
+    mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
 
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
-      closeMenu();
-      burger.focus();
-    }
-  });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
+        closeMobileMenu();
+        burger.focus();
+      }
+    });
+  }
 
 
   /* -----------------------------------------------------------------------
-     6. Smooth Anchor Scrolling
+     10. Smooth Anchor Scrolling with Precision Offset
      ----------------------------------------------------------------------- */
   qsa('a[href^="#"]').forEach(a => {
     a.addEventListener('click', function (e) {
       const href = this.getAttribute('href');
-      if (href === '#') return;
+      if (href === '#' || !href) return;
       const target = qs(href);
       if (!target) return;
+
       e.preventDefault();
-      const top = target.getBoundingClientRect().top + window.scrollY - 60;
-      window.scrollTo({ top, behavior: motionOk() ? 'smooth' : 'auto' });
+      const navOffset = 64;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY - navOffset;
+
+      window.scrollTo({
+        top: Math.max(0, targetTop),
+        behavior: motionOk() ? 'smooth' : 'auto'
+      });
     });
   });
 
 
   /* -----------------------------------------------------------------------
-     7. Hero Geometric Canvas
+     11. Hero Geometric Canvas (Swiss Geometry & Interactive Parallax)
      ----------------------------------------------------------------------- */
   const canvas = qs('#heroCanvas');
 
   if (canvas) {
     const ctx = canvas.getContext('2d');
     let W, H;
-    let mx = 0.5, my = 0.5;
+    let mouseX = 0.5, mouseY = 0.5;
+    let targetMouseX = 0.5, targetMouseY = 0.5;
 
-    function resize() {
-      const r   = canvas.parentElement.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      W = r.width; H = r.height;
+    function resizeCanvas() {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const dpr  = Math.min(window.devicePixelRatio || 1, 2);
+      W = rect.width;
+      H = rect.height;
       canvas.width  = W * dpr;
       canvas.height = H * dpr;
       canvas.style.width  = W + 'px';
@@ -186,8 +343,8 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    /* Shapes */
-    const COLS = 7, ROWS = 7;
+    const COLS = 7;
+    const ROWS = 7;
     const shapes = [];
 
     function initShapes() {
@@ -198,136 +355,173 @@
             c, r,
             type: (c + r) % 3,
             rot: Math.random() * Math.PI * 2,
-            rv:  (Math.random() - .5) * .006,
-            sc:  .55 + Math.random() * .45,
-            ph:  Math.random() * Math.PI * 2,
+            rotSpeed: (Math.random() - 0.5) * 0.007,
+            scale: 0.6 + Math.random() * 0.4,
+            phase: Math.random() * Math.PI * 2,
           });
         }
       }
     }
 
-    /* Colour helpers (read theme) */
-    function isDark() { return html.getAttribute('data-theme') === 'dark'; }
+    function isDarkMode() {
+      return html.getAttribute('data-theme') === 'dark';
+    }
 
-    function dotClr()    { return isDark() ? 'rgba(255,255,255,.05)' : 'rgba(32,33,31,.045)'; }
-    function strokeClr() { return isDark() ? 'rgba(197,173,125,.30)' : 'rgba(173,149,104,.22)'; }
-    function accentClr() { return isDark() ? 'rgba(197,173,125,.40)' : 'rgba(173,149,104,.32)'; }
+    function getGridDotColor() {
+      return isDarkMode() ? 'rgba(255, 255, 255, 0.06)' : 'rgba(32, 33, 31, 0.05)';
+    }
 
-    function draw(t) {
+    function getShapeStrokeColor() {
+      return isDarkMode() ? 'rgba(197, 173, 125, 0.32)' : 'rgba(173, 149, 104, 0.24)';
+    }
+
+    function getAccentColor() {
+      return isDarkMode() ? 'rgba(197, 173, 125, 0.45)' : 'rgba(173, 149, 104, 0.36)';
+    }
+
+    function drawScene(time) {
       ctx.clearRect(0, 0, W, H);
-      const s = t * .001;
-      const cW = W / COLS, cH = H / ROWS;
-      const unit = Math.min(cW, cH) * .24;
+      const t = time * 0.001;
 
-      /* Grid dots */
-      ctx.fillStyle = dotClr();
-      for (let r = 0; r <= ROWS; r++)
+      // Smooth mouse interpolation (spring damping)
+      mouseX += (targetMouseX - mouseX) * 0.05;
+      mouseY += (targetMouseY - mouseY) * 0.05;
+
+      const cellW = W / COLS;
+      const cellH = H / ROWS;
+      const unit  = Math.min(cellW, cellH) * 0.25;
+
+      // 1. Grid of precision alignment dots
+      ctx.fillStyle = getGridDotColor();
+      for (let r = 0; r <= ROWS; r++) {
         for (let c = 0; c <= COLS; c++) {
           ctx.beginPath();
-          ctx.arc(c * cW, r * cH, 1.2, 0, Math.PI * 2);
+          ctx.arc(c * cellW, r * cellH, 1.25, 0, Math.PI * 2);
           ctx.fill();
         }
+      }
 
-      /* Shapes */
-      const sc = strokeClr();
+      // 2. Harmonic geometric shapes
+      const strokeColor = getShapeStrokeColor();
       shapes.forEach(sh => {
-        const cx = (sh.c + .5) * cW + (mx - .5) * 10 * (sh.c / COLS);
-        const cy = (sh.r + .5) * cH + (my - .5) * 10 * (sh.r / ROWS);
-        const rot = sh.rot + s * sh.rv * 60;
-        const pulse = 1 + Math.sin(s * 1.1 + sh.ph) * .07;
-        const sz = unit * sh.sc * pulse;
+        const cx = (sh.c + 0.5) * cellW + (mouseX - 0.5) * 12 * (sh.c / COLS);
+        const cy = (sh.r + 0.5) * cellH + (mouseY - 0.5) * 12 * (sh.r / ROWS);
+        const rot = sh.rot + t * sh.rotSpeed * 60;
+        const pulse = 1 + Math.sin(t * 1.1 + sh.phase) * 0.07;
+        const sz = unit * sh.scale * pulse;
 
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(rot);
-        ctx.strokeStyle = sc;
-        ctx.lineWidth = .8;
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = 0.85;
 
         if (sh.type === 0) {
-          const h = sz * .5;
-          ctx.strokeRect(-h, -h, sz, sz);
+          // Square
+          const half = sz * 0.5;
+          ctx.strokeRect(-half, -half, sz, sz);
         } else if (sh.type === 1) {
+          // Circle
           ctx.beginPath();
-          ctx.arc(0, 0, sz * .5, 0, Math.PI * 2);
+          ctx.arc(0, 0, sz * 0.5, 0, Math.PI * 2);
           ctx.stroke();
         } else {
-          const a = sz * .5;
+          // Cross / plus
+          const arm = sz * 0.5;
           ctx.beginPath();
-          ctx.moveTo(-a, 0); ctx.lineTo(a, 0);
-          ctx.moveTo(0, -a); ctx.lineTo(0, a);
+          ctx.moveTo(-arm, 0); ctx.lineTo(arm, 0);
+          ctx.moveTo(0, -arm); ctx.lineTo(0, arm);
           ctx.stroke();
         }
         ctx.restore();
       });
 
-      /* Central accent composition */
-      const aS  = unit * 2.8;
-      const aX  = W * .5 + (mx - .5) * 18;
-      const aY  = H * .5 + (my - .5) * 18;
-      const aR  = s * .12;
+      // 3. Central Accent Composition (Swiss Editorial Focus)
+      const accentSize = unit * 2.85;
+      const accentX = W * 0.5 + (mouseX - 0.5) * 22;
+      const accentY = H * 0.5 + (mouseY - 0.5) * 22;
+      const accentRot = t * 0.12;
 
       ctx.save();
-      ctx.translate(aX, aY);
-      ctx.rotate(aR);
-      ctx.strokeStyle = accentClr();
+      ctx.translate(accentX, accentY);
+      ctx.rotate(accentRot);
+      ctx.strokeStyle = getAccentColor();
       ctx.lineWidth = 1.2;
 
-      const aH = aS * .5;
-      ctx.strokeRect(-aH, -aH, aS, aS);
+      // Outer square
+      const halfAccent = accentSize * 0.5;
+      ctx.strokeRect(-halfAccent, -halfAccent, accentSize, accentSize);
 
+      // Inner circle
       ctx.beginPath();
-      ctx.arc(0, 0, aS * .30, 0, Math.PI * 2);
+      ctx.arc(0, 0, accentSize * 0.32, 0, Math.PI * 2);
       ctx.stroke();
 
+      // Precision diagonal
       ctx.beginPath();
-      ctx.moveTo(-aH, aH); ctx.lineTo(aH, -aH);
+      ctx.moveTo(-halfAccent, halfAccent);
+      ctx.lineTo(halfAccent, -halfAccent);
       ctx.stroke();
 
-      /* Small diamond */
-      const dS = aS * .18;
+      // Rotating nested diamond
+      const diamondSize = accentSize * 0.18;
       ctx.save();
-      ctx.rotate(Math.PI / 4);
-      ctx.strokeRect(-dS, -dS, dS * 2, dS * 2);
+      ctx.rotate(Math.PI / 4 + t * 0.08);
+      ctx.strokeRect(-diamondSize, -diamondSize, diamondSize * 2, diamondSize * 2);
       ctx.restore();
 
       ctx.restore();
 
-      if (motionOk()) requestAnimationFrame(draw);
+      if (motionOk()) {
+        requestAnimationFrame(drawScene);
+      }
     }
 
     document.addEventListener('mousemove', e => {
-      mx = e.clientX / window.innerWidth;
-      my = e.clientY / window.innerHeight;
-    });
+      targetMouseX = e.clientX / window.innerWidth;
+      targetMouseY = e.clientY / window.innerHeight;
+    }, { passive: true });
 
-    window.addEventListener('resize', resize);
+    window.addEventListener('resize', resizeCanvas, { passive: true });
 
-    resize();
+    resizeCanvas();
     initShapes();
-    motionOk() ? requestAnimationFrame(draw) : draw(0);
+    if (motionOk()) {
+      requestAnimationFrame(drawScene);
+    } else {
+      drawScene(0);
+    }
   }
 
 
   /* -----------------------------------------------------------------------
-     8. Scroll event (throttled via rAF)
+     12. Throttled Unified Scroll Listener
      ----------------------------------------------------------------------- */
-  let ticking = false;
+  let scrollTicking = false;
   window.addEventListener('scroll', () => {
-    if (!ticking) {
-      requestAnimationFrame(() => { updateProgress(); ticking = false; });
-      ticking = true;
+    if (!scrollTicking) {
+      requestAnimationFrame(() => {
+        updateScrollProgress();
+        updateActiveNav();
+        scrollTicking = false;
+      });
+      scrollTicking = true;
     }
   }, { passive: true });
 
-  updateProgress();
+  // Initial call
+  updateScrollProgress();
+  updateActiveNav();
 
 
   /* -----------------------------------------------------------------------
-     9. Keyboard-only focus rings
+     13. Keyboard-Only Focus Indicator Polyfill
      ----------------------------------------------------------------------- */
   document.addEventListener('keydown', e => {
     if (e.key === 'Tab') body.classList.add('keyboard-nav');
   });
-  document.addEventListener('mousedown', () => body.classList.remove('keyboard-nav'));
+  document.addEventListener('mousedown', () => {
+    body.classList.remove('keyboard-nav');
+  });
 
 })();
