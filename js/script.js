@@ -632,4 +632,208 @@
     body.classList.remove('keyboard-nav');
   });
 
+  /* -----------------------------------------------------------------------
+     14. Production Contact Form Experience
+     ----------------------------------------------------------------------- */
+  const contactForm = qs('#contactForm');
+  if (contactForm) {
+    const submitBtn = qs('#contactSubmitBtn', contactForm);
+    const formStatus = qs('#formStatus', contactForm);
+
+    const fields = {
+      name: {
+        el: qs('#contactName', contactForm),
+        err: qs('#contactNameError', contactForm),
+        validate: v => v.trim().length >= 2,
+        msg: 'Please provide your full name (minimum 2 characters).'
+      },
+      email: {
+        el: qs('#contactEmail', contactForm),
+        err: qs('#contactEmailError', contactForm),
+        validate: v => /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()),
+        msg: 'Please enter a valid business email address.'
+      },
+      company: {
+        el: qs('#contactCompany', contactForm),
+        err: qs('#contactCompanyError', contactForm),
+        validate: v => v.trim().length >= 2,
+        msg: 'Please provide your organization or company name.'
+      },
+      service: {
+        el: qs('#contactService', contactForm),
+        err: qs('#contactServiceError', contactForm),
+        validate: v => Boolean(v && v.trim()),
+        msg: 'Please select an area of expertise.'
+      },
+      message: {
+        el: qs('#contactMessage', contactForm),
+        err: qs('#contactMessageError', contactForm),
+        validate: v => v.trim().length >= 10,
+        msg: 'Please provide project context (minimum 10 characters).'
+      }
+    };
+
+    function validateField(key) {
+      const field = fields[key];
+      if (!field || !field.el) return true;
+      const val = field.el.value;
+      const isValid = field.validate(val);
+
+      if (!isValid) {
+        field.el.classList.add('is-invalid');
+        field.el.setAttribute('aria-invalid', 'true');
+        if (field.err) {
+          field.err.textContent = field.msg;
+          field.err.style.display = 'block';
+        }
+      } else {
+        field.el.classList.remove('is-invalid');
+        field.el.removeAttribute('aria-invalid');
+        if (field.err) {
+          field.err.textContent = '';
+          field.err.style.display = 'none';
+        }
+      }
+      return isValid;
+    }
+
+    // Real-time blur and input listeners
+    Object.keys(fields).forEach(key => {
+      const field = fields[key];
+      if (!field.el) return;
+
+      field.el.addEventListener('blur', () => {
+        if (field.el.value.trim() !== '') {
+          validateField(key);
+        }
+      });
+
+      field.el.addEventListener('input', () => {
+        if (field.el.classList.contains('is-invalid')) {
+          validateField(key);
+        }
+      });
+    });
+
+    // Form submit listener
+    contactForm.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      // Check honeypot
+      const botField = qs('input[name="_gotcha"]', contactForm);
+      if (botField && botField.value.trim() !== '') {
+        return; // Silent ignore bot submissions
+      }
+
+      // Validate all fields
+      let formIsValid = true;
+      let firstInvalidEl = null;
+
+      Object.keys(fields).forEach(key => {
+        const valid = validateField(key);
+        if (!valid) {
+          formIsValid = false;
+          if (!firstInvalidEl) firstInvalidEl = fields[key].el;
+        }
+      });
+
+      if (!formIsValid) {
+        if (firstInvalidEl) firstInvalidEl.focus();
+        if (formStatus) {
+          formStatus.className = 'form-status form-status--error';
+          formStatus.textContent = 'Please correct the highlighted fields before submitting.';
+          formStatus.style.display = 'block';
+        }
+        return;
+      }
+
+      // Set button to submitting state
+      const originalBtnHTML = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.setAttribute('aria-busy', 'true');
+      submitBtn.innerHTML = `<span>Transmitting Inquiry...</span>`;
+
+      if (formStatus) {
+        formStatus.className = 'form-status';
+        formStatus.style.display = 'none';
+        formStatus.textContent = '';
+      }
+
+      const actionUrl = contactForm.getAttribute('action') || '';
+      const isUnconfigured = !actionUrl || actionUrl.includes('YOUR_FORM_ID') || window.location.protocol === 'file:';
+
+      const formData = new FormData(contactForm);
+      const nameVal = formData.get('name') || '';
+      const emailVal = formData.get('email') || '';
+      const companyVal = formData.get('company') || '';
+      const serviceVal = formData.get('service') || '';
+      const messageVal = formData.get('message') || '';
+
+      if (isUnconfigured) {
+        // Honest transparency: Validated cleanly without claiming fake server response
+        setTimeout(() => {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+          submitBtn.innerHTML = originalBtnHTML;
+
+          if (formStatus) {
+            formStatus.className = 'form-status form-status--success';
+            const mailtoSubject = encodeURIComponent(`Northline Advisory Inquiry: ${companyVal} — ${serviceVal}`);
+            const mailtoBody = encodeURIComponent(
+              `Name: ${nameVal}\nEmail: ${emailVal}\nCompany: ${companyVal}\nService: ${serviceVal}\n\nProject Scope:\n${messageVal}`
+            );
+            const mailtoLink = `mailto:hello@northline.co?subject=${mailtoSubject}&body=${mailtoBody}`;
+
+            formStatus.innerHTML = `
+              <strong>Inquiry details validated.</strong><br>
+              Production endpoint is currently in demo configuration mode. To transmit this inquiry immediately via your client, click below or connect your Formspree/Netlify endpoint:
+              <br><br>
+              <a href="${mailtoLink}" class="btn btn--primary" style="display:inline-flex; padding:0.6rem 1.4rem; font-size:0.8rem; text-transform:uppercase;">
+                Launch Email Dispatcher
+              </a>
+            `;
+            formStatus.style.display = 'block';
+          }
+        }, 600);
+      } else {
+        // Live production transmission
+        try {
+          const response = await fetch(actionUrl, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+          submitBtn.innerHTML = originalBtnHTML;
+
+          if (response.ok) {
+            contactForm.reset();
+            if (formStatus) {
+              formStatus.className = 'form-status form-status--success';
+              formStatus.innerHTML = `<strong>Inquiry transmitted successfully.</strong> Our advisory team will review your project requirements and respond within one business day.`;
+              formStatus.style.display = 'block';
+            }
+          } else {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.error || 'Server error occurred during transmission.');
+          }
+        } catch (err) {
+          submitBtn.disabled = false;
+          submitBtn.removeAttribute('aria-busy');
+          submitBtn.innerHTML = originalBtnHTML;
+
+          if (formStatus) {
+            formStatus.className = 'form-status form-status--error';
+            formStatus.innerHTML = `Transmission unsuccessful: ${err.message || 'Network error'}. Please reach our partners directly at <a href="mailto:hello@northline.co" style="text-decoration:underline;">hello@northline.co</a>.`;
+            formStatus.style.display = 'block';
+          }
+        }
+      }
+    });
+  }
+
 })();

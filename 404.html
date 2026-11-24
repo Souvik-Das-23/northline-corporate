@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>404 — Coordinate Not Found · NORTHLINE</title>
+  <meta name="description" content="The requested page coordinate could not be resolved on the NORTHLINE platform.">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#F5F4F0" id="metaThemeColor">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Prevent Theme Flash -->
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('northline-theme');
+        var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.getElementById('metaThemeColor');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#151615' : '#F5F4F0');
+      } catch (e) {}
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="nav nav--scrolled" id="mainNav" role="banner">
+    <div class="nav__inner">
+      <a href="index.html" class="nav__logo" aria-label="NORTHLINE Home">
+        <svg class="nav__logo-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect width="9" height="9" fill="currentColor"/>
+          <rect x="11" width="9" height="9" fill="currentColor"/>
+          <rect y="11" width="9" height="9" fill="currentColor"/>
+        </svg>
+        <span class="nav__logo-text">NORTHLINE</span>
+      </a>
+
+      <nav class="nav__menu" aria-label="Main navigation">
+        <a href="index.html#expertise" class="nav__link">Expertise</a>
+        <a href="index.html#work" class="nav__link">Work</a>
+        <a href="index.html#about" class="nav__link">About</a>
+        <a href="index.html#contact" class="nav__link">Contact</a>
+      </nav>
+
+      <div class="nav__right">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Toggle theme">
+          <svg class="theme-toggle__sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.17 3.17l1.42 1.42M11.41 11.41l1.42 1.42M3.17 12.83l1.42-1.42M11.41 4.59l1.42-1.42" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <svg class="theme-toggle__moon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M13.5 9.5a6 6 0 01-7-7 6 6 0 107 7z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main style="min-height: 80vh; display: flex; align-items: center; padding: 120px var(--gutter) 80px;">
+    <div style="max-width: var(--container); margin: 0 auto; width: 100%;">
+      <span class="section-label" style="display: block; margin-bottom: var(--sp-6);">404 · Unresolved Coordinate</span>
+      <h1 class="hero__headline-line" style="font-size: clamp(2.5rem, 6vw, 4.5rem); margin-bottom: var(--sp-6);">
+        The requested coordinate<br>does not exist<span class="dot" style="color: var(--accent);">.</span>
+      </h1>
+      <p style="font-size: var(--ts-base); color: var(--text-2); max-width: 52ch; margin-bottom: var(--sp-10); line-height: 1.7;">
+        The resource you are looking for has been decommissioned, relocated, or was never chartered.
+      </p>
+      <div style="display: flex; gap: var(--sp-4); flex-wrap: wrap;">
+        <a href="index.html" class="btn btn--primary"><span class="btn__text">Return to Platform</span></a>
+        <a href="index.html#contact" class="btn btn--outline"><span class="btn__text">Inquire Directly</span></a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__bottom" style="border-top: none; padding-top: 0;">
+        <span class="footer__copy">&copy; 2026 NORTHLINE Advisory AG. All rights reserved.</span>
+        <div class="footer__legal">
+          <a href="index.html#about">Privacy Policy</a>
+          <a href="index.html#about">Terms of Engagement</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

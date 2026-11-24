@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#F5F4F0"/>
+  <line x1="80" y1="120" x2="1120" y2="120" stroke="#DEDCD4" stroke-width="1"/>
+  <line x1="80" y1="510" x2="1120" y2="510" stroke="#DEDCD4" stroke-width="1"/>
+  
+  <!-- Logo -->
+  <g transform="translate(80, 60)">
+    <rect x="0" y="0" width="14" height="14" fill="#20211F"/>
+    <rect x="18" y="0" width="14" height="14" fill="#20211F"/>
+    <rect x="0" y="18" width="14" height="14" fill="#20211F"/>
+    <text x="44" y="24" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="600" font-size="18" letter-spacing="0.15em" fill="#20211F">NORTHLINE</text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="80" y="180" font-family="'DM Sans', system-ui, sans-serif" font-size="16" letter-spacing="0.14em" fill="#AD9568" text-transform="uppercase">International Consulting &amp; Advisory</text>
+  
+  <!-- Headline -->
+  <text x="80" y="260" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="300" font-size="64" letter-spacing="-0.04em" fill="#20211F">Clarity for</text>
+  <text x="80" y="335" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="300" font-size="64" letter-spacing="-0.04em" fill="#20211F">what comes</text>
+  <text x="80" y="410" font-family="'Space Grotesk', system-ui, sans-serif" font-weight="300" font-size="64" letter-spacing="-0.04em" fill="#20211F">next<tspan fill="#AD9568">.</tspan></text>
+
+  <!-- Subtitle -->
+  <text x="80" y="465" font-family="'DM Sans', system-ui, sans-serif" font-size="20" fill="#686762">Strategy &middot; Digital Transformation &middot; Operations &middot; Organisation Design</text>
+
+  <!-- Footer Locations -->
+  <text x="80" y="555" font-family="'Space Grotesk', system-ui, sans-serif" font-size="14" letter-spacing="0.1em" fill="#8E8D87">ZÜRICH &middot; LONDON &middot; NEW YORK</text>
+  <text x="1120" y="555" font-family="'Space Grotesk', system-ui, sans-serif" font-size="14" letter-spacing="0.1em" fill="#8E8D87" text-anchor="end">NORTHLINE.CO</text>
+</svg>
