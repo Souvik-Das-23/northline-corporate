@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NORTHLINE — Clarity for what comes next.</title>
+  <meta name="description" content="NORTHLINE is an international consulting agency delivering clarity, strategy, and transformation for forward-thinking organisations.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300;1,9..40,400&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Scroll Progress -->
+  <div class="scroll-progress" aria-hidden="true"><div class="scroll-progress__bar"></div></div>
+
+  <!-- ====================================================================
+       NAVIGATION
+       ==================================================================== -->
+  <header class="nav" role="banner">
+    <div class="nav__inner">
+      <a href="#" class="nav__logo" aria-label="NORTHLINE Home">
+        <svg class="nav__logo-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <rect width="9" height="9" fill="currentColor"/>
+          <rect x="11" width="9" height="9" fill="currentColor"/>
+          <rect y="11" width="9" height="9" fill="currentColor"/>
+        </svg>
+        <span class="nav__logo-text">NORTHLINE</span>
+      </a>
+
+      <nav class="nav__menu" aria-label="Main navigation">
+        <a href="#expertise" class="nav__link">Expertise</a>
+        <a href="#work" class="nav__link">Work</a>
+        <a href="#about" class="nav__link">About</a>
+        <a href="#contact" class="nav__link">Contact</a>
+      </nav>
+
+      <div class="nav__right">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+          <svg class="theme-toggle__sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <circle cx="8" cy="8" r="3.5" stroke="currentColor" stroke-width="1.2"/>
+            <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.17 3.17l1.42 1.42M11.41 11.41l1.42 1.42M3.17 12.83l1.42-1.42M11.41 4.59l1.42-1.42" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+          <svg class="theme-toggle__moon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+            <path d="M13.5 9.5a6 6 0 01-7-7 6 6 0 107 7z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="nav__burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span class="nav__burger-line"></span>
+          <span class="nav__burger-line"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile Overlay -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+      <a href="#expertise" class="mobile-menu__link" data-mobile-link>Expertise</a>
+      <a href="#work" class="mobile-menu__link" data-mobile-link>Work</a>
+      <a href="#about" class="mobile-menu__link" data-mobile-link>About</a>
+      <a href="#contact" class="mobile-menu__link" data-mobile-link>Contact</a>
+    </nav>
+    <footer class="mobile-menu__foot">
+      <span class="mobile-menu__label">Get in touch</span>
+      <a href="mailto:hello@northline.co" class="mobile-menu__email">hello@northline.co</a>
+    </footer>
+  </div>
+
+
+  <main>
+
+    <!-- ==================================================================
+         HERO
+         ================================================================== -->
+    <section class="hero">
+      <div class="hero__grid">
+        <!-- Left: text -->
+        <div class="hero__content">
+          <span class="hero__eyebrow reveal" data-reveal>International Consulting &amp; Advisory</span>
+          <h1 class="hero__headline">
+            <span class="hero__headline-line reveal" data-reveal data-delay="1">Clarity for</span>
+            <span class="hero__headline-line reveal" data-reveal data-delay="2">what comes</span>
+            <span class="hero__headline-line hero__headline-line--accent reveal" data-reveal data-delay="3">next<span class="dot">.</span></span>
+          </h1>
+          <p class="hero__sub reveal" data-reveal data-delay="4">
+            We partner with ambitious organisations to navigate complexity,
+            unlock growth, and build what the future demands.
+          </p>
+          <div class="hero__actions reveal" data-reveal data-delay="5">
+            <a href="#contact" class="btn btn--primary">Start a conversation</a>
+            <a href="#work" class="btn btn--outline">View our work</a>
+          </div>
+        </div>
+
+        <!-- Right: geometric visual -->
+        <div class="hero__visual" aria-hidden="true">
+          <canvas id="heroCanvas"></canvas>
+        </div>
+      </div>
+
+      <div class="hero__bottom reveal" data-reveal data-delay="6">
+        <span class="hero__scroll-line" aria-hidden="true"></span>
+        <span class="hero__scroll-label">Scroll to explore</span>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         INTRO
+         ================================================================== -->
+    <section class="intro">
+      <div class="intro__inner">
+        <div class="intro__col-label">
+          <span class="section-label reveal" data-reveal>Who we are</span>
+        </div>
+        <div class="intro__col-text">
+          <p class="intro__statement reveal" data-reveal data-delay="1">
+            NORTHLINE is an independent advisory firm for organisations at inflection points — where the next decision defines the next decade.
+          </p>
+          <p class="intro__body reveal" data-reveal data-delay="2">
+            We sit at the intersection of strategy, technology and operations.
+            Our counsel is clear, direct, and grounded in evidence. We don't
+            decorate complexity — we resolve it.
+          </p>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         EXPERTISE
+         ================================================================== -->
+    <section class="expertise" id="expertise">
+      <div class="expertise__inner">
+        <header class="expertise__header">
+          <span class="section-label reveal" data-reveal>What we do</span>
+          <h2 class="section-heading reveal" data-reveal data-delay="1">
+            Expertise built for<br>consequential decisions.
+          </h2>
+        </header>
+
+        <div class="expertise__grid">
+          <article class="expertise__card reveal" data-reveal>
+            <span class="expertise__index">01</span>
+            <h3 class="expertise__title">Corporate Strategy</h3>
+            <p class="expertise__desc">
+              Market entry, competitive positioning, portfolio optimisation
+              and long-range strategic planning for enterprises navigating
+              inflection points.
+            </p>
+            <ul class="tag-list">
+              <li>Market Analysis</li>
+              <li>Growth Strategy</li>
+              <li>M&amp;A Advisory</li>
+            </ul>
+          </article>
+
+          <article class="expertise__card reveal" data-reveal data-delay="1">
+            <span class="expertise__index">02</span>
+            <h3 class="expertise__title">Digital Transformation</h3>
+            <p class="expertise__desc">
+              End-to-end technology modernisation — from architecture and
+              data strategy to change management and capability building.
+            </p>
+            <ul class="tag-list">
+              <li>Cloud &amp; Infrastructure</li>
+              <li>Data &amp; AI</li>
+              <li>Process Automation</li>
+            </ul>
+          </article>
+
+          <article class="expertise__card reveal" data-reveal data-delay="2">
+            <span class="expertise__index">03</span>
+            <h3 class="expertise__title">Operations Excellence</h3>
+            <p class="expertise__desc">
+              Supply chain redesign, operational efficiency programmes, and
+              performance management systems that deliver measurable outcomes.
+            </p>
+            <ul class="tag-list">
+              <li>Supply Chain</li>
+              <li>Lean Operations</li>
+              <li>Performance Systems</li>
+            </ul>
+          </article>
+
+          <article class="expertise__card reveal" data-reveal data-delay="3">
+            <span class="expertise__index">04</span>
+            <h3 class="expertise__title">Organisation Design</h3>
+            <p class="expertise__desc">
+              Talent strategy, leadership alignment, culture transformation,
+              and operating model design for the next chapter of growth.
+            </p>
+            <ul class="tag-list">
+              <li>Leadership Advisory</li>
+              <li>Culture &amp; Change</li>
+              <li>Workforce Planning</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         SELECTED WORK
+         ================================================================== -->
+    <section class="work" id="work">
+      <div class="work__inner">
+        <header class="work__header">
+          <span class="section-label reveal" data-reveal>Selected work</span>
+          <h2 class="section-heading reveal" data-reveal data-delay="1">
+            Results that<br>speak clearly.
+          </h2>
+        </header>
+
+        <div class="work__list">
+          <!-- Project 1 -->
+          <article class="work__item reveal" data-reveal>
+            <div class="work__item-visual work__item-visual--1">
+              <div class="work__shape"></div>
+            </div>
+            <div class="work__item-body">
+              <div class="work__meta">
+                <span class="work__cat">Corporate Strategy</span>
+                <span class="work__year">2026</span>
+              </div>
+              <h3 class="work__title">Pan-European market expansion for a leading fintech platform</h3>
+              <p class="work__text">
+                Developed a phased market entry strategy across 6 European markets,
+                delivering €240 M in projected revenue within 36 months.
+              </p>
+              <a href="#" class="work__link">
+                Read case study
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Project 2 -->
+          <article class="work__item work__item--reverse reveal" data-reveal data-delay="1">
+            <div class="work__item-visual work__item-visual--2">
+              <div class="work__shape"></div>
+            </div>
+            <div class="work__item-body">
+              <div class="work__meta">
+                <span class="work__cat">Digital Transformation</span>
+                <span class="work__year">2025</span>
+              </div>
+              <h3 class="work__title">Legacy systems modernisation for a global logistics provider</h3>
+              <p class="work__text">
+                Architected and executed a full platform migration, reducing
+                operational costs by 34 % and improving throughput by 2.8×.
+              </p>
+              <a href="#" class="work__link">
+                Read case study
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+              </a>
+            </div>
+          </article>
+
+          <!-- Project 3 -->
+          <article class="work__item reveal" data-reveal data-delay="2">
+            <div class="work__item-visual work__item-visual--3">
+              <div class="work__shape"></div>
+            </div>
+            <div class="work__item-body">
+              <div class="work__meta">
+                <span class="work__cat">Organisation Design</span>
+                <span class="work__year">2025</span>
+              </div>
+              <h3 class="work__title">Operating model redesign for a Fortune 500 manufacturer</h3>
+              <p class="work__text">
+                Restructured global operations across 14 countries, improving
+                decision velocity by 60 % and saving $18 M annually.
+              </p>
+              <a href="#" class="work__link">
+                Read case study
+                <svg width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
+              </a>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         STATISTICS
+         ================================================================== -->
+    <section class="stats" id="stats">
+      <div class="stats__inner">
+        <div class="stats__left">
+          <span class="section-label reveal" data-reveal>By the numbers</span>
+          <p class="stats__statement reveal" data-reveal data-delay="1">
+            Measurable impact,<br>every engagement.
+          </p>
+        </div>
+        <div class="stats__grid">
+          <div class="stats__item reveal" data-reveal>
+            <span class="stats__number" data-count="140">0</span><span class="stats__suffix">+</span>
+            <span class="stats__label">Projects delivered across<br>12 global markets</span>
+          </div>
+          <div class="stats__item reveal" data-reveal data-delay="1">
+            <span class="stats__number" data-count="96">0</span><span class="stats__suffix">%</span>
+            <span class="stats__label">Client retention rate<br>year over year</span>
+          </div>
+          <div class="stats__item reveal" data-reveal data-delay="2">
+            <span class="stats__number" data-count="4">0</span><span class="stats__suffix">.2×</span>
+            <span class="stats__label">Average return on<br>engagement investment</span>
+          </div>
+          <div class="stats__item reveal" data-reveal data-delay="3">
+            <span class="stats__number" data-count="38">0</span>
+            <span class="stats__label">Senior consultants and<br>domain specialists</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         ABOUT
+         ================================================================== -->
+    <section class="about" id="about">
+      <div class="about__inner">
+        <header class="about__header">
+          <span class="section-label reveal" data-reveal>Our approach</span>
+          <h2 class="section-heading reveal" data-reveal data-delay="1">
+            Precision over<br>persuasion.
+          </h2>
+        </header>
+
+        <div class="about__body">
+          <div class="about__narrative reveal" data-reveal data-delay="2">
+            <p class="about__lead">
+              Every engagement begins with listening. We invest deeply in
+              understanding context, constraints and ambition before we
+              ever propose a path forward.
+            </p>
+            <p>
+              Our team brings decades of collective experience across
+              industries and continents — but we never rely on playbooks.
+              Each recommendation is custom-built for the situation at hand.
+            </p>
+          </div>
+
+          <div class="about__principles">
+            <div class="about__principle reveal" data-reveal data-delay="2">
+              <span class="about__principle-num">01</span>
+              <div>
+                <h3 class="about__principle-title">Evidence first</h3>
+                <p class="about__principle-text">
+                  Every recommendation grounded in data, research and
+                  rigorous analysis — never intuition alone.
+                </p>
+              </div>
+            </div>
+            <div class="about__principle reveal" data-reveal data-delay="3">
+              <span class="about__principle-num">02</span>
+              <div>
+                <h3 class="about__principle-title">Radical clarity</h3>
+                <p class="about__principle-text">
+                  We tell clients what they need to hear, not what they want
+                  to hear. Clear thinking demands honest counsel.
+                </p>
+              </div>
+            </div>
+            <div class="about__principle reveal" data-reveal data-delay="4">
+              <span class="about__principle-num">03</span>
+              <div>
+                <h3 class="about__principle-title">Lasting impact</h3>
+                <p class="about__principle-text">
+                  We measure success by the outcomes our clients achieve
+                  long after the engagement ends.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ==================================================================
+         CONTACT CTA
+         ================================================================== -->
+    <section class="contact" id="contact">
+      <div class="contact__inner">
+        <span class="section-label reveal" data-reveal>Get in touch</span>
+        <h2 class="contact__heading reveal" data-reveal data-delay="1">
+          Let's build what<br>comes next.
+        </h2>
+        <p class="contact__sub reveal" data-reveal data-delay="2">
+          Whether you're facing a strategic inflection point, planning a
+          transformation, or exploring what's possible — we'd welcome
+          the conversation.
+        </p>
+        <div class="contact__cta reveal" data-reveal data-delay="3">
+          <a href="mailto:hello@northline.co" class="btn btn--primary btn--lg">hello@northline.co</a>
+        </div>
+        <div class="contact__offices reveal" data-reveal data-delay="4">
+          <div class="contact__office">
+            <span class="contact__office-city">London</span>
+            <span class="contact__office-addr">48 Chancery Lane, WC2A</span>
+          </div>
+          <div class="contact__office">
+            <span class="contact__office-city">Zürich</span>
+            <span class="contact__office-addr">Bahnhofstrasse 24, 8001</span>
+          </div>
+          <div class="contact__office">
+            <span class="contact__office-city">New York</span>
+            <span class="contact__office-addr">110 Wall Street, 10005</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ====================================================================
+       FOOTER
+       ==================================================================== -->
+  <footer class="footer" role="contentinfo">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <a href="#" class="nav__logo" aria-label="NORTHLINE Home">
+            <svg class="nav__logo-mark" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+              <rect width="9" height="9" fill="currentColor"/>
+              <rect x="11" width="9" height="9" fill="currentColor"/>
+              <rect y="11" width="9" height="9" fill="currentColor"/>
+            </svg>
+            <span class="nav__logo-text">NORTHLINE</span>
+          </a>
+        </div>
+        <nav class="footer__nav" aria-label="Footer navigation">
+          <div class="footer__col">
+            <h4 class="footer__heading">Navigate</h4>
+            <a href="#expertise">Expertise</a>
+            <a href="#work">Work</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__heading">Connect</h4>
+            <a href="#">LinkedIn</a>
+            <a href="#">Twitter / X</a>
+            <a href="#">Insights</a>
+          </div>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <span class="footer__copy">&copy; 2026 NORTHLINE Advisory Ltd.</span>
+        <div class="footer__legal">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/script.js"></script>
+</body>
+</html>
