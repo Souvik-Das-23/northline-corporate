@@ -84,31 +84,47 @@
   <main>
 
     <!-- ==================================================================
-         HERO
+         HERO SECTION (Editorial Scale & Abstract Architectural Visual)
          ================================================================== -->
     <section class="hero" id="hero">
       <div class="hero__grid">
-        <!-- Left: text -->
+        <!-- Left: Dominant Editorial Typography -->
         <div class="hero__content">
-          <span class="hero__eyebrow hero-reveal" data-hero-delay="0">International Consulting &amp; Advisory</span>
+          <div class="hero__meta-top hero-reveal" data-hero-delay="0">
+            <span class="hero__eyebrow">International Consulting &amp; Advisory</span>
+            <span class="hero__origin-tag">CH &middot; UK &middot; US</span>
+          </div>
+
           <h1 class="hero__headline">
             <span class="hero__headline-wrapper"><span class="hero__headline-line hero-reveal" data-hero-delay="1">Clarity for</span></span>
             <span class="hero__headline-wrapper"><span class="hero__headline-line hero-reveal" data-hero-delay="2">what comes</span></span>
             <span class="hero__headline-wrapper"><span class="hero__headline-line hero__headline-line--accent hero-reveal" data-hero-delay="3">next<span class="dot">.</span></span></span>
           </h1>
+
           <p class="hero__sub hero-reveal" data-hero-delay="4">
-            We partner with ambitious organisations to navigate complexity,
-            unlock growth, and build what the future demands.
+            We partner with ambitious leadership teams to navigate structural complexity,
+            unlock consequential growth, and build what the decade demands.
           </p>
+
           <div class="hero__actions hero-reveal" data-hero-delay="5">
             <a href="#contact" class="btn btn--primary magnetic-btn" data-magnetic><span class="btn__text">Start a conversation</span></a>
-            <a href="#work" class="btn btn--outline magnetic-btn" data-magnetic><span class="btn__text">View our work</span></a>
+            <a href="#work" class="btn btn--outline magnetic-btn" data-magnetic><span class="btn__text">Selected work</span></a>
           </div>
         </div>
 
-        <!-- Right: geometric visual -->
+        <!-- Right: Abstract Architectural Visual with Restrained Depth -->
         <div class="hero__visual" id="heroVisualContainer" aria-hidden="true">
-          <canvas id="heroCanvas"></canvas>
+          <div class="hero__visual-frame">
+            <span class="visual-corner visual-corner--tl">+</span>
+            <span class="visual-corner visual-corner--tr">+</span>
+            <span class="visual-corner visual-corner--bl">+</span>
+            <span class="visual-corner visual-corner--br">+</span>
+            <div class="hero__visual-caption">
+              <span class="caption-label">PERSPECTIVE · 01</span>
+              <span class="caption-coord">47.3769° N, 8.5417° E</span>
+            </div>
+            <canvas id="heroCanvas"></canvas>
+          </div>
         </div>
       </div>
 
@@ -122,21 +138,21 @@
 
 
     <!-- ==================================================================
-         INTRO
+         COMPANY INTRODUCTION
          ================================================================== -->
     <section class="intro" id="intro">
       <div class="intro__inner">
         <div class="intro__col-label">
           <span class="section-label reveal" data-reveal>Who we are</span>
+          <span class="intro__index-mark">EST. 2018</span>
         </div>
         <div class="intro__col-text">
           <p class="intro__statement reveal" data-reveal data-delay="1">
             NORTHLINE is an independent advisory firm for organisations at inflection points — where the next decision defines the next decade.
           </p>
           <p class="intro__body reveal" data-reveal data-delay="2">
-            We sit at the intersection of strategy, technology and operations.
-            Our counsel is clear, direct, and grounded in evidence. We don't
-            decorate complexity — we resolve it.
+            We operate at the convergence of corporate strategy, enterprise technology, and operational architecture.
+            Our counsel is clear, direct, and grounded in forensic evidence. We do not decorate complexity — we resolve it.
           </p>
         </div>
       </div>
@@ -144,25 +160,28 @@
 
 
     <!-- ==================================================================
-         EXPERTISE
+         EXPERTISE & SERVICES (Editorial Swiss Grid Layout)
          ================================================================== -->
     <section class="expertise" id="expertise">
       <div class="expertise__inner">
         <header class="expertise__header">
-          <span class="section-label reveal" data-reveal>What we do</span>
+          <span class="section-label reveal" data-reveal>Capabilities</span>
           <h2 class="section-heading reveal" data-reveal data-delay="1">
             Expertise built for<br>consequential decisions.
           </h2>
         </header>
 
         <div class="expertise__grid">
+          <!-- Item 01 -->
           <article class="expertise__card reveal" data-reveal data-stagger="0">
-            <span class="expertise__index">01</span>
+            <div class="expertise__card-top">
+              <span class="expertise__index">01</span>
+              <span class="expertise__discipline">Strategy</span>
+            </div>
             <h3 class="expertise__title">Corporate Strategy</h3>
             <p class="expertise__desc">
-              Market entry, competitive positioning, portfolio optimisation
-              and long-range strategic planning for enterprises navigating
-              inflection points.
+              Market entry, competitive positioning, portfolio optimisation,
+              and long-range strategic roadmaps for enterprises facing structural industry shifts.
             </p>
             <ul class="tag-list">
               <li>Market Analysis</li>
@@ -171,43 +190,55 @@
             </ul>
           </article>
 
+          <!-- Item 02 -->
           <article class="expertise__card reveal" data-reveal data-stagger="1">
-            <span class="expertise__index">02</span>
+            <div class="expertise__card-top">
+              <span class="expertise__index">02</span>
+              <span class="expertise__discipline">Technology</span>
+            </div>
             <h3 class="expertise__title">Digital Transformation</h3>
             <p class="expertise__desc">
-              End-to-end technology modernisation — from architecture and
-              data strategy to change management and capability building.
+              End-to-end technology modernisation — from distributed cloud architecture and data governance
+              to AI integration and enterprise capability building.
             </p>
             <ul class="tag-list">
-              <li>Cloud &amp; Infrastructure</li>
+              <li>Cloud &amp; Core</li>
               <li>Data &amp; AI</li>
-              <li>Process Automation</li>
+              <li>Automation</li>
             </ul>
           </article>
 
+          <!-- Item 03 -->
           <article class="expertise__card reveal" data-reveal data-stagger="2">
-            <span class="expertise__index">03</span>
+            <div class="expertise__card-top">
+              <span class="expertise__index">03</span>
+              <span class="expertise__discipline">Operations</span>
+            </div>
             <h3 class="expertise__title">Operations Excellence</h3>
             <p class="expertise__desc">
-              Supply chain redesign, operational efficiency programmes, and
-              performance management systems that deliver measurable outcomes.
+              Supply chain resilience, lean execution frameworks, and performance measurement systems
+              engineered to deliver sustained capital efficiency.
             </p>
             <ul class="tag-list">
               <li>Supply Chain</li>
-              <li>Lean Operations</li>
-              <li>Performance Systems</li>
+              <li>Lean Execution</li>
+              <li>Capital Systems</li>
             </ul>
           </article>
 
+          <!-- Item 04 -->
           <article class="expertise__card reveal" data-reveal data-stagger="3">
-            <span class="expertise__index">04</span>
+            <div class="expertise__card-top">
+              <span class="expertise__index">04</span>
+              <span class="expertise__discipline">Organisation</span>
+            </div>
             <h3 class="expertise__title">Organisation Design</h3>
             <p class="expertise__desc">
-              Talent strategy, leadership alignment, culture transformation,
-              and operating model design for the next chapter of growth.
+              Operating model restructuring, leadership alignment, culture transformation,
+              and strategic workforce succession for high-growth global teams.
             </p>
             <ul class="tag-list">
-              <li>Leadership Advisory</li>
+              <li>Leadership Alignment</li>
               <li>Culture &amp; Change</li>
               <li>Workforce Planning</li>
             </ul>
@@ -218,33 +249,54 @@
 
 
     <!-- ==================================================================
-         SELECTED WORK
+         PROJECT SHOWCASE (Premium Case Study Architecture)
          ================================================================== -->
     <section class="work" id="work">
       <div class="work__inner">
         <header class="work__header">
-          <span class="section-label reveal" data-reveal>Selected work</span>
+          <span class="section-label reveal" data-reveal>Selected Work</span>
           <h2 class="section-heading reveal" data-reveal data-delay="1">
-            Results that<br>speak clearly.
+            Outcomes that<br>speak clearly.
           </h2>
         </header>
 
         <div class="work__list">
-          <!-- Project 1 -->
+          <!-- Project 01 -->
           <article class="work__item reveal" data-reveal data-parallax-item>
             <div class="work__item-visual work__item-visual--1">
-              <div class="work__shape" data-parallax-shape></div>
+              <div class="work__architectural-stage" data-parallax-shape>
+                <div class="arch-plane arch-plane--base"></div>
+                <div class="arch-plane arch-plane--elevated"></div>
+                <div class="arch-axis arch-axis--x"></div>
+                <div class="arch-axis arch-axis--y"></div>
+                <div class="arch-accent-badge">€240M IMPACT</div>
+              </div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
+                <span class="work__index-label">CASE 01</span>
                 <span class="work__cat">Corporate Strategy</span>
                 <span class="work__year">2026</span>
               </div>
-              <h3 class="work__title">Pan-European market expansion for a leading fintech platform</h3>
+              <h3 class="work__title">Pan-European market expansion for a tier-one fintech infrastructure platform</h3>
               <p class="work__text">
-                Developed a phased market entry strategy across 6 European markets,
-                delivering €240 M in projected revenue within 36 months.
+                Formulated a multi-stage market entry thesis across 6 European jurisdictions,
+                securing regulatory approval and generating €240M in projected net revenues within 36 months.
               </p>
+              <div class="work__metrics-strip">
+                <div class="metric-item">
+                  <span class="metric-val">6</span>
+                  <span class="metric-lbl">Jurisdictions</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">€240M</span>
+                  <span class="metric-lbl">Projected Growth</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">36 mo</span>
+                  <span class="metric-lbl">Delivery Window</span>
+                </div>
+              </div>
               <a href="#" class="work__link">
                 <span class="work__link-text">Read case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -252,21 +304,41 @@
             </div>
           </article>
 
-          <!-- Project 2 -->
+          <!-- Project 02 -->
           <article class="work__item work__item--reverse reveal" data-reveal data-delay="1" data-parallax-item>
             <div class="work__item-visual work__item-visual--2">
-              <div class="work__shape" data-parallax-shape></div>
+              <div class="work__architectural-stage" data-parallax-shape>
+                <div class="arch-circle arch-circle--outer"></div>
+                <div class="arch-circle arch-circle--inner"></div>
+                <div class="arch-axis arch-axis--diag"></div>
+                <div class="arch-accent-badge">34% EFFICIENCY</div>
+              </div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
+                <span class="work__index-label">CASE 02</span>
                 <span class="work__cat">Digital Transformation</span>
                 <span class="work__year">2025</span>
               </div>
-              <h3 class="work__title">Legacy systems modernisation for a global logistics provider</h3>
+              <h3 class="work__title">Legacy architecture modernisation for a global logistics conglomerate</h3>
               <p class="work__text">
-                Architected and executed a full platform migration, reducing
-                operational costs by 34 % and improving throughput by 2.8×.
+                Architected and oversaw an enterprise platform overhaul, decommissioning monolithic legacy cores,
+                lowering operational expenditure by 34% and accelerating container throughput by 2.8×.
               </p>
+              <div class="work__metrics-strip">
+                <div class="metric-item">
+                  <span class="metric-val">-34%</span>
+                  <span class="metric-lbl">OPEX Reduction</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">2.8×</span>
+                  <span class="metric-lbl">Throughput Velocity</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">99.99%</span>
+                  <span class="metric-lbl">Target Uptime</span>
+                </div>
+              </div>
               <a href="#" class="work__link">
                 <span class="work__link-text">Read case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -274,21 +346,40 @@
             </div>
           </article>
 
-          <!-- Project 3 -->
+          <!-- Project 03 -->
           <article class="work__item reveal" data-reveal data-delay="2" data-parallax-item>
             <div class="work__item-visual work__item-visual--3">
-              <div class="work__shape" data-parallax-shape></div>
+              <div class="work__architectural-stage" data-parallax-shape>
+                <div class="arch-polygon arch-polygon--tri"></div>
+                <div class="arch-plane arch-plane--prism"></div>
+                <div class="arch-accent-badge">+60% VELOCITY</div>
+              </div>
             </div>
             <div class="work__item-body">
               <div class="work__meta">
+                <span class="work__index-label">CASE 03</span>
                 <span class="work__cat">Organisation Design</span>
                 <span class="work__year">2025</span>
               </div>
-              <h3 class="work__title">Operating model redesign for a Fortune 500 manufacturer</h3>
+              <h3 class="work__title">Global operating model redesign for a Fortune 500 manufacturing group</h3>
               <p class="work__text">
-                Restructured global operations across 14 countries, improving
-                decision velocity by 60 % and saving $18 M annually.
+                Restructured executive governance and regional delivery hubs across 14 markets,
+                improving strategic decision velocity by 60% and unlocking $18M in recurring annual operational savings.
               </p>
+              <div class="work__metrics-strip">
+                <div class="metric-item">
+                  <span class="metric-val">14</span>
+                  <span class="metric-lbl">Global Markets</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">+60%</span>
+                  <span class="metric-lbl">Decision Velocity</span>
+                </div>
+                <div class="metric-item">
+                  <span class="metric-val">$18M</span>
+                  <span class="metric-lbl">Annual Savings</span>
+                </div>
+              </div>
               <a href="#" class="work__link">
                 <span class="work__link-text">Read case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
@@ -301,7 +392,7 @@
 
 
     <!-- ==================================================================
-         STATISTICS
+         BUSINESS STATISTICS
          ================================================================== -->
     <section class="stats" id="stats">
       <div class="stats__inner">
@@ -334,7 +425,7 @@
 
 
     <!-- ==================================================================
-         ABOUT
+         ABOUT & PRINCIPLES
          ================================================================== -->
     <section class="about" id="about">
       <div class="about__inner">
@@ -353,9 +444,9 @@
               ever propose a path forward.
             </p>
             <p>
-              Our team brings decades of collective experience across
-              industries and continents — but we never rely on playbooks.
-              Each recommendation is custom-built for the situation at hand.
+              Our partners bring decades of collective advisory leadership across
+              industries and continents — yet we deliberately avoid standardized playbooks.
+              Each recommendation is custom-crafted for the precise inflection point at hand.
             </p>
           </div>
 
@@ -365,8 +456,8 @@
               <div>
                 <h3 class="about__principle-title">Evidence first</h3>
                 <p class="about__principle-text">
-                  Every recommendation grounded in data, research and
-                  rigorous analysis — never intuition alone.
+                  Every strategic recommendation is anchored in empirical data, market research, and
+                  rigorous sensitivity analysis — never intuition or management dogma alone.
                 </p>
               </div>
             </div>
@@ -375,8 +466,8 @@
               <div>
                 <h3 class="about__principle-title">Radical clarity</h3>
                 <p class="about__principle-text">
-                  We tell clients what they need to hear, not what they want
-                  to hear. Clear thinking demands honest counsel.
+                  We tell executive leadership what they must hear, not what is comfortable to hear.
+                  Clear commercial decision-making demands honest counsel.
                 </p>
               </div>
             </div>
@@ -385,8 +476,8 @@
               <div>
                 <h3 class="about__principle-title">Lasting impact</h3>
                 <p class="about__principle-text">
-                  We measure success by the outcomes our clients achieve
-                  long after the engagement ends.
+                  We measure success not by the eloquence of deliverables, but by enterprise value
+                  and operational resilience sustained long after our engagement concludes.
                 </p>
               </div>
             </div>
@@ -397,34 +488,36 @@
 
 
     <!-- ==================================================================
-         CONTACT CTA
+         CONTACT CTA SECTION (Editorial Oversized Typography)
          ================================================================== -->
     <section class="contact" id="contact">
       <div class="contact__inner">
-        <span class="section-label reveal" data-reveal>Get in touch</span>
+        <span class="section-label reveal" data-reveal>Initiate Dialogue</span>
         <h2 class="contact__heading reveal" data-reveal data-delay="1">
           Let's build what<br>comes next.
         </h2>
         <p class="contact__sub reveal" data-reveal data-delay="2">
-          Whether you're facing a strategic inflection point, planning a
-          transformation, or exploring what's possible — we'd welcome
-          the conversation.
+          Whether navigating an enterprise inflection point, planning a structural transformation,
+          or evaluating capital allocation — we welcome confidential consultation.
         </p>
         <div class="contact__cta reveal" data-reveal data-delay="3">
           <a href="mailto:hello@northline.co" class="btn btn--primary btn--lg magnetic-btn" data-magnetic><span class="btn__text">hello@northline.co</span></a>
         </div>
         <div class="contact__offices reveal" data-reveal data-delay="4">
           <div class="contact__office">
-            <span class="contact__office-city">London</span>
-            <span class="contact__office-addr">48 Chancery Lane, WC2A</span>
-          </div>
-          <div class="contact__office">
             <span class="contact__office-city">Zürich</span>
             <span class="contact__office-addr">Bahnhofstrasse 24, 8001</span>
+            <span class="contact__office-coords">47.3769° N, 8.5417° E</span>
+          </div>
+          <div class="contact__office">
+            <span class="contact__office-city">London</span>
+            <span class="contact__office-addr">48 Chancery Lane, WC2A</span>
+            <span class="contact__office-coords">51.5074° N, 0.1278° W</span>
           </div>
           <div class="contact__office">
             <span class="contact__office-city">New York</span>
             <span class="contact__office-addr">110 Wall Street, 10005</span>
+            <span class="contact__office-coords">40.7128° N, 74.0060° W</span>
           </div>
         </div>
       </div>
@@ -448,29 +541,36 @@
             </svg>
             <span class="nav__logo-text">NORTHLINE</span>
           </a>
+          <p class="footer__brand-tag">Advisory for consequential decisions.</p>
         </div>
         <nav class="footer__nav" aria-label="Footer navigation">
           <div class="footer__col">
-            <h4 class="footer__heading">Navigate</h4>
+            <h4 class="footer__heading">Navigation</h4>
             <a href="#expertise">Expertise</a>
             <a href="#work">Work</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
           </div>
           <div class="footer__col">
-            <h4 class="footer__heading">Connect</h4>
+            <h4 class="footer__heading">Perspectives</h4>
+            <a href="#">Strategic Briefings</a>
+            <a href="#">Research Papers</a>
+            <a href="#">Annual Outlook</a>
+          </div>
+          <div class="footer__col">
+            <h4 class="footer__heading">Presence</h4>
             <a href="#">LinkedIn</a>
             <a href="#">Twitter / X</a>
-            <a href="#">Insights</a>
+            <a href="#">Bloomberg Directory</a>
           </div>
         </nav>
       </div>
       <div class="footer__bottom">
-        <span class="footer__copy">&copy; 2026 NORTHLINE Advisory Ltd.</span>
+        <span class="footer__copy">&copy; 2026 NORTHLINE Advisory AG. All rights reserved.</span>
         <div class="footer__legal">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Cookies</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Engagement</a>
+          <a href="#">Compliance</a>
         </div>
       </div>
     </div>

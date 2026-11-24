@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NORTHLINE — Advanced Interaction & Motion Design System
+   NORTHLINE — Advanced Interaction & Architectural Motion Design System
    Vanilla JS · Zero dependencies · High Performance
    ========================================================================== */
 
@@ -84,10 +84,10 @@
     // Subtle Hero scroll parallax & fade
     if (heroVisual && motionOk()) {
       if (scrollY < window.innerHeight) {
-        const offset = scrollY * 0.15;
-        const opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.9));
-        heroVisual.style.transform = `translate3d(0, ${offset}px, 0)`;
-        heroVisual.style.opacity = opacity;
+        const offset = scrollY * 0.12;
+        const opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.95));
+        heroVisual.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
+        heroVisual.style.opacity = opacity.toFixed(2);
       }
     }
 
@@ -162,7 +162,6 @@
         const x = e.clientX - (rect.left + rect.width / 2);
         const y = e.clientY - (rect.top + rect.height / 2);
 
-        // Subtle pull: button container moves up to ±5px, text moves ±2px
         btn.style.transform = `translate3d(${x * 0.18}px, ${y * 0.18}px, 0)`;
         if (text) {
           text.style.transform = `translate3d(${x * 0.08}px, ${y * 0.08}px, 0)`;
@@ -177,7 +176,6 @@
           text.style.transform = 'translate3d(0, 0, 0)';
         }
 
-        // Clean up transition after spring completes
         setTimeout(() => {
           btn.style.transition = '';
           if (text) text.style.transition = '';
@@ -234,7 +232,6 @@
       function step(now) {
         const elapsed = now - start;
         const progress = Math.min(elapsed / duration, 1);
-        // ease-out cubic
         const ease = 1 - Math.pow(1 - progress, 3);
         el.textContent = Math.round(ease * target);
         if (progress < 1) requestAnimationFrame(step);
@@ -321,7 +318,7 @@
 
 
   /* -----------------------------------------------------------------------
-     11. Hero Geometric Canvas (Swiss Geometry & Interactive Parallax)
+     11. Abstract Architectural Visual (Axonometric Spatial Canvas)
      ----------------------------------------------------------------------- */
   const canvas = qs('#heroCanvas');
 
@@ -343,134 +340,212 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     }
 
-    const COLS = 7;
-    const ROWS = 7;
-    const shapes = [];
-
-    function initShapes() {
-      shapes.length = 0;
-      for (let r = 0; r < ROWS; r++) {
-        for (let c = 0; c < COLS; c++) {
-          shapes.push({
-            c, r,
-            type: (c + r) % 3,
-            rot: Math.random() * Math.PI * 2,
-            rotSpeed: (Math.random() - 0.5) * 0.007,
-            scale: 0.6 + Math.random() * 0.4,
-            phase: Math.random() * Math.PI * 2,
-          });
-        }
-      }
-    }
-
     function isDarkMode() {
       return html.getAttribute('data-theme') === 'dark';
     }
 
-    function getGridDotColor() {
-      return isDarkMode() ? 'rgba(255, 255, 255, 0.06)' : 'rgba(32, 33, 31, 0.05)';
+    // Color definitions
+    function getColors() {
+      const dark = isDarkMode();
+      return {
+        grid:        dark ? 'rgba(255, 255, 255, 0.04)'  : 'rgba(32, 33, 31, 0.04)',
+        axis:        dark ? 'rgba(197, 173, 125, 0.18)'  : 'rgba(173, 149, 104, 0.16)',
+        wireframe:   dark ? 'rgba(242, 240, 233, 0.18)'  : 'rgba(32, 33, 31, 0.14)',
+        planeFill:   dark ? 'rgba(197, 173, 125, 0.05)'  : 'rgba(173, 149, 104, 0.045)',
+        accentLine:  dark ? 'rgba(197, 173, 125, 0.65)'  : 'rgba(173, 149, 104, 0.55)',
+        accentDot:   dark ? 'rgba(197, 173, 125, 0.85)'  : 'rgba(173, 149, 104, 0.80)',
+        text:        dark ? 'rgba(163, 163, 155, 0.50)'  : 'rgba(133, 132, 126, 0.60)',
+        elevationArc:dark ? 'rgba(197, 173, 125, 0.22)'  : 'rgba(173, 149, 104, 0.18)'
+      };
     }
 
-    function getShapeStrokeColor() {
-      return isDarkMode() ? 'rgba(197, 173, 125, 0.32)' : 'rgba(173, 149, 104, 0.24)';
-    }
+    // 3D Isometric Projection Helper
+    function projectIso(x, y, z, cx, cy, rotY, rotX) {
+      // Rotation about Y axis
+      const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
+      const x1 = x * cosY + z * sinY;
+      const z1 = -x * sinY + z * cosY;
 
-    function getAccentColor() {
-      return isDarkMode() ? 'rgba(197, 173, 125, 0.45)' : 'rgba(173, 149, 104, 0.36)';
+      // Rotation about X axis
+      const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
+      const y2 = y * cosX - z1 * sinX;
+      const z2 = y * sinX + z1 * cosX;
+
+      // Isometric scale
+      const scale = 1.15;
+      return {
+        px: cx + x1 * scale,
+        py: cy + y2 * scale,
+        depth: z2
+      };
     }
 
     function drawScene(time) {
       ctx.clearRect(0, 0, W, H);
       const t = time * 0.001;
+      const clrs = getColors();
 
-      // Smooth mouse interpolation (spring damping)
-      mouseX += (targetMouseX - mouseX) * 0.05;
-      mouseY += (targetMouseY - mouseY) * 0.05;
+      // Damped mouse interpolation
+      mouseX += (targetMouseX - mouseX) * 0.04;
+      mouseY += (targetMouseY - mouseY) * 0.04;
 
-      const cellW = W / COLS;
-      const cellH = H / ROWS;
-      const unit  = Math.min(cellW, cellH) * 0.25;
+      const cx = W * 0.5;
+      const cy = H * 0.5;
 
-      // 1. Grid of precision alignment dots
-      ctx.fillStyle = getGridDotColor();
-      for (let r = 0; r <= ROWS; r++) {
-        for (let c = 0; c <= COLS; c++) {
-          ctx.beginPath();
-          ctx.arc(c * cellW, r * cellH, 1.25, 0, Math.PI * 2);
-          ctx.fill();
-        }
+      // Subtle dynamic camera rotation angles
+      const rotY = Math.PI / 6 + (mouseX - 0.5) * 0.35 + Math.sin(t * 0.15) * 0.06;
+      const rotX = Math.PI / 7 + (mouseY - 0.5) * 0.25 + Math.cos(t * 0.12) * 0.04;
+
+      // 1. Draw Architectural Floor Grid (Base Datum)
+      const gridSize = 220;
+      const gridStep = 44;
+      ctx.strokeStyle = clrs.grid;
+      ctx.lineWidth = 0.8;
+
+      for (let i = -gridSize; i <= gridSize; i += gridStep) {
+        // Lines parallel to X
+        const p1 = projectIso(-gridSize, 70, i, cx, cy, rotY, rotX);
+        const p2 = projectIso(gridSize, 70, i, cx, cy, rotY, rotX);
+        ctx.beginPath();
+        ctx.moveTo(p1.px, p1.py);
+        ctx.lineTo(p2.px, p2.py);
+        ctx.stroke();
+
+        // Lines parallel to Z
+        const p3 = projectIso(i, 70, -gridSize, cx, cy, rotY, rotX);
+        const p4 = projectIso(i, 70, gridSize, cx, cy, rotY, rotX);
+        ctx.beginPath();
+        ctx.moveTo(p3.px, p3.py);
+        ctx.lineTo(p4.px, p4.py);
+        ctx.stroke();
       }
 
-      // 2. Harmonic geometric shapes
-      const strokeColor = getShapeStrokeColor();
-      shapes.forEach(sh => {
-        const cx = (sh.c + 0.5) * cellW + (mouseX - 0.5) * 12 * (sh.c / COLS);
-        const cy = (sh.r + 0.5) * cellH + (mouseY - 0.5) * 12 * (sh.r / ROWS);
-        const rot = sh.rot + t * sh.rotSpeed * 60;
-        const pulse = 1 + Math.sin(t * 1.1 + sh.phase) * 0.07;
-        const sz = unit * sh.scale * pulse;
+      // 2. Architectural Coordinate Lines (Axis Projections)
+      const ax0 = projectIso(-160, 70, 0, cx, cy, rotY, rotX);
+      const ax1 = projectIso(160, 70, 0, cx, cy, rotY, rotX);
+      const ay0 = projectIso(0, 70, -160, cx, cy, rotY, rotX);
+      const ay1 = projectIso(0, 70, 160, cx, cy, rotY, rotX);
 
-        ctx.save();
-        ctx.translate(cx, cy);
-        ctx.rotate(rot);
-        ctx.strokeStyle = strokeColor;
-        ctx.lineWidth = 0.85;
+      ctx.strokeStyle = clrs.axis;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      ctx.beginPath();
+      ctx.moveTo(ax0.px, ax0.py); ctx.lineTo(ax1.px, ax1.py);
+      ctx.moveTo(ay0.px, ay0.py); ctx.lineTo(ay1.px, ay1.py);
+      ctx.stroke();
+      ctx.setLineDash([]);
 
-        if (sh.type === 0) {
-          // Square
-          const half = sz * 0.5;
-          ctx.strokeRect(-half, -half, sz, sz);
-        } else if (sh.type === 1) {
-          // Circle
-          ctx.beginPath();
-          ctx.arc(0, 0, sz * 0.5, 0, Math.PI * 2);
-          ctx.stroke();
-        } else {
-          // Cross / plus
-          const arm = sz * 0.5;
-          ctx.beginPath();
-          ctx.moveTo(-arm, 0); ctx.lineTo(arm, 0);
-          ctx.moveTo(0, -arm); ctx.lineTo(0, arm);
-          ctx.stroke();
+      // 3. Layered Architectural Volumes & Cantilevered Planes
+      // Slabs defined by 3D corners [x, y, z]
+      const slabs = [
+        // Base Foundation Plate (large, thin, grounded)
+        {
+          corners: [
+            [-120, 50, -90], [120, 50, -90],
+            [120, 50, 90],   [-120, 50, 90]
+          ],
+          accentEdge: 0,
+          fill: clrs.planeFill,
+          stroke: clrs.wireframe
+        },
+        // Mid Cantilever Volume (shifted, elevated)
+        {
+          corners: [
+            [-70, -10, -110], [90, -10, -110],
+            [90, -10, 50],   [-70, -10, 50]
+          ],
+          accentEdge: 1,
+          fill: clrs.planeFill,
+          stroke: clrs.wireframe
+        },
+        // Upper Pavilion Roof Plate (floating high, champagne accented)
+        {
+          corners: [
+            [-100, -70, -40], [60, -70, -40],
+            [60, -70, 100],   [-100, -70, 100]
+          ],
+          accentEdge: 2,
+          fill: clrs.planeFill,
+          stroke: clrs.wireframe
         }
-        ctx.restore();
+      ];
+
+      // Vertical structural columns connecting slabs
+      const columns = [
+        [[-70, 50, -70], [-70, -70, -70]],
+        [[50, 50, -40],  [50, -70, -40]],
+        [[-40, 50, 60],  [-40, -70, 60]],
+        [[40, 50, 40],   [40, -70, 40]]
+      ];
+
+      // Draw structural vertical lines
+      ctx.strokeStyle = clrs.wireframe;
+      ctx.lineWidth = 0.9;
+      columns.forEach(col => {
+        const top = projectIso(col[0][0], col[0][1], col[0][2], cx, cy, rotY, rotX);
+        const btm = projectIso(col[1][0], col[1][1], col[1][2], cx, cy, rotY, rotX);
+        ctx.beginPath();
+        ctx.moveTo(top.px, top.py);
+        ctx.lineTo(btm.px, btm.py);
+        ctx.stroke();
       });
 
-      // 3. Central Accent Composition (Swiss Editorial Focus)
-      const accentSize = unit * 2.85;
-      const accentX = W * 0.5 + (mouseX - 0.5) * 22;
-      const accentY = H * 0.5 + (mouseY - 0.5) * 22;
-      const accentRot = t * 0.12;
+      // Draw Slabs
+      slabs.forEach(slab => {
+        const pts = slab.corners.map(c => projectIso(c[0], c[1], c[2], cx, cy, rotY, rotX));
 
-      ctx.save();
-      ctx.translate(accentX, accentY);
-      ctx.rotate(accentRot);
-      ctx.strokeStyle = getAccentColor();
-      ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.moveTo(pts[0].px, pts[0].py);
+        for (let j = 1; j < pts.length; j++) {
+          ctx.lineTo(pts[j].px, pts[j].py);
+        }
+        ctx.closePath();
 
-      // Outer square
-      const halfAccent = accentSize * 0.5;
-      ctx.strokeRect(-halfAccent, -halfAccent, accentSize, accentSize);
+        ctx.fillStyle = slab.fill;
+        ctx.fill();
 
-      // Inner circle
+        ctx.strokeStyle = slab.stroke;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Highlight one structural edge in Champagne Gold
+        const eIdx = slab.accentEdge;
+        const pA = pts[eIdx];
+        const pB = pts[(eIdx + 1) % pts.length];
+        ctx.strokeStyle = clrs.accentLine;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(pA.px, pA.py);
+        ctx.lineTo(pB.px, pB.py);
+        ctx.stroke();
+
+        // Small architectural node markers
+        ctx.fillStyle = clrs.accentDot;
+        ctx.beginPath();
+        ctx.arc(pA.px, pA.py, 2, 0, Math.PI * 2);
+        ctx.fill();
+      });
+
+      // 4. Subtle Concentric Golden-Ratio Elevation Arc
+      const arcCenter = projectIso(0, 0, 0, cx, cy, rotY, rotX);
+      ctx.strokeStyle = clrs.elevationArc;
+      ctx.lineWidth = 0.8;
+      ctx.setLineDash([3, 5]);
       ctx.beginPath();
-      ctx.arc(0, 0, accentSize * 0.32, 0, Math.PI * 2);
+      ctx.arc(arcCenter.px, arcCenter.py, 130, -Math.PI * 0.7, Math.PI * 0.35);
       ctx.stroke();
-
-      // Precision diagonal
       ctx.beginPath();
-      ctx.moveTo(-halfAccent, halfAccent);
-      ctx.lineTo(halfAccent, -halfAccent);
+      ctx.arc(arcCenter.px, arcCenter.py, 80, Math.PI * 0.2, Math.PI * 1.1);
       ctx.stroke();
+      ctx.setLineDash([]);
 
-      // Rotating nested diamond
-      const diamondSize = accentSize * 0.18;
-      ctx.save();
-      ctx.rotate(Math.PI / 4 + t * 0.08);
-      ctx.strokeRect(-diamondSize, -diamondSize, diamondSize * 2, diamondSize * 2);
-      ctx.restore();
-
-      ctx.restore();
+      // 5. Technical Notation Marks
+      ctx.fillStyle = clrs.text;
+      ctx.font = '9px "Space Grotesk", monospace';
+      const nodeA = projectIso(-100, -70, -40, cx, cy, rotY, rotX);
+      ctx.fillText('EL +18.4m', nodeA.px + 8, nodeA.py - 6);
+      const nodeB = projectIso(120, 50, 90, cx, cy, rotY, rotX);
+      ctx.fillText('REF 0.0', nodeB.px + 8, nodeB.py + 4);
 
       if (motionOk()) {
         requestAnimationFrame(drawScene);
@@ -485,7 +560,6 @@
     window.addEventListener('resize', resizeCanvas, { passive: true });
 
     resizeCanvas();
-    initShapes();
     if (motionOk()) {
       requestAnimationFrame(drawScene);
     } else {
