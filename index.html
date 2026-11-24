@@ -2,10 +2,11 @@
 <html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>NORTHLINE — Clarity for what comes next.</title>
-  <meta name="description" content="NORTHLINE is an international consulting agency delivering clarity, strategy, and transformation for forward-thinking organisations.">
-  
+  <meta name="description" content="NORTHLINE is an international consulting and advisory firm delivering clarity, corporate strategy, and enterprise transformation for forward-thinking organisations.">
+  <meta name="theme-color" content="#F5F4F0" id="metaThemeColor">
+
   <!-- Prevent Theme Flash (FOUC) -->
   <script>
     (function () {
@@ -13,6 +14,8 @@
         var stored = localStorage.getItem('northline-theme');
         var theme = stored || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
         document.documentElement.setAttribute('data-theme', theme);
+        var meta = document.getElementById('metaThemeColor');
+        if (meta) meta.setAttribute('content', theme === 'dark' ? '#151615' : '#F5F4F0');
       } catch (e) {}
     })();
   </script>
@@ -49,7 +52,7 @@
       </nav>
 
       <div class="nav__right">
-        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Toggle dark mode">
+        <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to dark theme" title="Toggle theme">
           <svg class="theme-toggle__sun" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <circle cx="8" cy="8" r="3.5" stroke="currentColor" stroke-width="1.2"/>
             <path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.17 3.17l1.42 1.42M11.41 11.41l1.42 1.42M3.17 12.83l1.42-1.42M11.41 4.59l1.42-1.42" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
@@ -58,7 +61,7 @@
             <path d="M13.5 9.5a6 6 0 01-7-7 6 6 0 107 7z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <button class="nav__burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+        <button class="nav__burger" id="navBurger" type="button" aria-label="Open navigation menu" aria-expanded="false" aria-controls="mobileMenu">
           <span class="nav__burger-line"></span>
           <span class="nav__burger-line"></span>
         </button>
@@ -67,26 +70,26 @@
   </header>
 
   <!-- Mobile Overlay -->
-  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
-    <nav class="mobile-menu__nav" aria-label="Mobile navigation">
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Mobile navigation">
+    <nav class="mobile-menu__nav" aria-label="Mobile menu navigation">
       <a href="#expertise" class="mobile-menu__link" data-mobile-link>Expertise</a>
       <a href="#work" class="mobile-menu__link" data-mobile-link>Work</a>
       <a href="#about" class="mobile-menu__link" data-mobile-link>About</a>
       <a href="#contact" class="mobile-menu__link" data-mobile-link>Contact</a>
     </nav>
     <footer class="mobile-menu__foot">
-      <span class="mobile-menu__label">Get in touch</span>
+      <span class="mobile-menu__label">Direct Advisory Inquiries</span>
       <a href="mailto:hello@northline.co" class="mobile-menu__email">hello@northline.co</a>
     </footer>
   </div>
 
 
-  <main>
+  <main id="mainContent">
 
     <!-- ==================================================================
          HERO SECTION (Editorial Scale & Abstract Architectural Visual)
          ================================================================== -->
-    <section class="hero" id="hero">
+    <section class="hero" id="hero" aria-label="Introduction">
       <div class="hero__grid">
         <!-- Left: Dominant Editorial Typography -->
         <div class="hero__content">
@@ -123,13 +126,13 @@
               <span class="caption-label">PERSPECTIVE · 01</span>
               <span class="caption-coord">47.3769° N, 8.5417° E</span>
             </div>
-            <canvas id="heroCanvas"></canvas>
+            <canvas id="heroCanvas" role="img" aria-label="Abstract architectural wireframe visualization in isometric perspective"></canvas>
           </div>
         </div>
       </div>
 
       <div class="hero__bottom hero-reveal" data-hero-delay="6">
-        <a href="#intro" class="hero__scroll-link" aria-label="Scroll to exploration">
+        <a href="#intro" class="hero__scroll-link" aria-label="Scroll down to company overview">
           <span class="hero__scroll-line" aria-hidden="true"></span>
           <span class="hero__scroll-label">Scroll to explore</span>
         </a>
@@ -140,7 +143,7 @@
     <!-- ==================================================================
          COMPANY INTRODUCTION
          ================================================================== -->
-    <section class="intro" id="intro">
+    <section class="intro" id="intro" aria-label="About NORTHLINE">
       <div class="intro__inner">
         <div class="intro__col-label">
           <span class="section-label reveal" data-reveal>Who we are</span>
@@ -162,7 +165,7 @@
     <!-- ==================================================================
          EXPERTISE & SERVICES (Editorial Swiss Grid Layout)
          ================================================================== -->
-    <section class="expertise" id="expertise">
+    <section class="expertise" id="expertise" aria-label="Areas of Expertise">
       <div class="expertise__inner">
         <header class="expertise__header">
           <span class="section-label reveal" data-reveal>Capabilities</span>
@@ -183,7 +186,7 @@
               Market entry, competitive positioning, portfolio optimisation,
               and long-range strategic roadmaps for enterprises facing structural industry shifts.
             </p>
-            <ul class="tag-list">
+            <ul class="tag-list" aria-label="Key strategy domains">
               <li>Market Analysis</li>
               <li>Growth Strategy</li>
               <li>M&amp;A Advisory</li>
@@ -201,7 +204,7 @@
               End-to-end technology modernisation — from distributed cloud architecture and data governance
               to AI integration and enterprise capability building.
             </p>
-            <ul class="tag-list">
+            <ul class="tag-list" aria-label="Key technology domains">
               <li>Cloud &amp; Core</li>
               <li>Data &amp; AI</li>
               <li>Automation</li>
@@ -219,7 +222,7 @@
               Supply chain resilience, lean execution frameworks, and performance measurement systems
               engineered to deliver sustained capital efficiency.
             </p>
-            <ul class="tag-list">
+            <ul class="tag-list" aria-label="Key operations domains">
               <li>Supply Chain</li>
               <li>Lean Execution</li>
               <li>Capital Systems</li>
@@ -237,7 +240,7 @@
               Operating model restructuring, leadership alignment, culture transformation,
               and strategic workforce succession for high-growth global teams.
             </p>
-            <ul class="tag-list">
+            <ul class="tag-list" aria-label="Key organisation domains">
               <li>Leadership Alignment</li>
               <li>Culture &amp; Change</li>
               <li>Workforce Planning</li>
@@ -251,7 +254,7 @@
     <!-- ==================================================================
          PROJECT SHOWCASE (Premium Case Study Architecture)
          ================================================================== -->
-    <section class="work" id="work">
+    <section class="work" id="work" aria-label="Selected Client Engagements">
       <div class="work__inner">
         <header class="work__header">
           <span class="section-label reveal" data-reveal>Selected Work</span>
@@ -297,8 +300,8 @@
                   <span class="metric-lbl">Delivery Window</span>
                 </div>
               </div>
-              <a href="#" class="work__link">
-                <span class="work__link-text">Read case study</span>
+              <a href="#contact" class="work__link">
+                <span class="work__link-text">Inquire about case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
@@ -339,8 +342,8 @@
                   <span class="metric-lbl">Target Uptime</span>
                 </div>
               </div>
-              <a href="#" class="work__link">
-                <span class="work__link-text">Read case study</span>
+              <a href="#contact" class="work__link">
+                <span class="work__link-text">Inquire about case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
@@ -380,8 +383,8 @@
                   <span class="metric-lbl">Annual Savings</span>
                 </div>
               </div>
-              <a href="#" class="work__link">
-                <span class="work__link-text">Read case study</span>
+              <a href="#contact" class="work__link">
+                <span class="work__link-text">Inquire about case study</span>
                 <svg class="work__link-arrow" width="13" height="13" viewBox="0 0 13 13" fill="none" aria-hidden="true"><path d="M1 12L12 1m0 0H4m8 0v8" stroke="currentColor" stroke-width="1.2"/></svg>
               </a>
             </div>
@@ -394,7 +397,7 @@
     <!-- ==================================================================
          BUSINESS STATISTICS
          ================================================================== -->
-    <section class="stats" id="stats">
+    <section class="stats" id="stats" aria-label="Quantitative Firm Track Record">
       <div class="stats__inner">
         <div class="stats__left">
           <span class="section-label reveal" data-reveal>By the numbers</span>
@@ -427,7 +430,7 @@
     <!-- ==================================================================
          ABOUT & PRINCIPLES
          ================================================================== -->
-    <section class="about" id="about">
+    <section class="about" id="about" aria-label="Philosophy and Principles">
       <div class="about__inner">
         <header class="about__header">
           <span class="section-label reveal" data-reveal>Our approach</span>
@@ -488,9 +491,9 @@
 
 
     <!-- ==================================================================
-         CONTACT CTA SECTION (Editorial Oversized Typography)
+         CONTACT CTA SECTION (Editorial Dominant Scale)
          ================================================================== -->
-    <section class="contact" id="contact">
+    <section class="contact" id="contact" aria-label="Contact and Locations">
       <div class="contact__inner">
         <span class="section-label reveal" data-reveal>Initiate Dialogue</span>
         <h2 class="contact__heading reveal" data-reveal data-delay="1">
@@ -553,24 +556,24 @@
           </div>
           <div class="footer__col">
             <h4 class="footer__heading">Perspectives</h4>
-            <a href="#">Strategic Briefings</a>
-            <a href="#">Research Papers</a>
-            <a href="#">Annual Outlook</a>
+            <a href="#expertise">Strategic Briefings</a>
+            <a href="#expertise">Research Papers</a>
+            <a href="#expertise">Annual Outlook</a>
           </div>
           <div class="footer__col">
             <h4 class="footer__heading">Presence</h4>
-            <a href="#">LinkedIn</a>
-            <a href="#">Twitter / X</a>
-            <a href="#">Bloomberg Directory</a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://x.com" target="_blank" rel="noopener noreferrer">Twitter / X</a>
+            <a href="#about">Bloomberg Directory</a>
           </div>
         </nav>
       </div>
       <div class="footer__bottom">
         <span class="footer__copy">&copy; 2026 NORTHLINE Advisory AG. All rights reserved.</span>
         <div class="footer__legal">
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Engagement</a>
-          <a href="#">Compliance</a>
+          <a href="#about">Privacy Policy</a>
+          <a href="#about">Terms of Engagement</a>
+          <a href="#about">Compliance</a>
         </div>
       </div>
     </div>

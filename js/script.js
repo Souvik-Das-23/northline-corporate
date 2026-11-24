@@ -1,5 +1,5 @@
 /* ==========================================================================
-   NORTHLINE — Advanced Interaction & Architectural Motion Design System
+   NORTHLINE — Production-Quality Responsive & Accessibility Interaction System
    Vanilla JS · Zero dependencies · High Performance
    ========================================================================== */
 
@@ -15,6 +15,7 @@
   const qsa   = (s, c) => [...(c || document).querySelectorAll(s)];
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const motionOk = () => !prefersReducedMotion.matches;
+  const hasFinePointer = () => window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
 
   /* -----------------------------------------------------------------------
@@ -34,17 +35,34 @@
 
 
   /* -----------------------------------------------------------------------
-     2. Theme Management (Zero-Flash & Synchronous Persistence)
+     2. Theme Management (Zero-Flash, Meta Theme Color & ARIA State)
      ----------------------------------------------------------------------- */
   const THEME_KEY = 'northline-theme';
   const toggleBtn = qs('#themeToggle');
+  const metaTheme = qs('#metaThemeColor');
+
+  function updateThemeUI(theme) {
+    if (toggleBtn) {
+      const isDark = theme === 'dark';
+      toggleBtn.setAttribute('aria-label', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+      toggleBtn.setAttribute('title', isDark ? 'Switch to light theme' : 'Switch to dark theme');
+    }
+    if (metaTheme) {
+      metaTheme.setAttribute('content', theme === 'dark' ? '#151615' : '#F5F4F0');
+    }
+  }
 
   function setTheme(theme) {
     html.setAttribute('data-theme', theme);
     try {
       localStorage.setItem(THEME_KEY, theme);
     } catch (e) {}
+    updateThemeUI(theme);
   }
+
+  // Initialize theme UI
+  const initialTheme = html.getAttribute('data-theme') || 'light';
+  updateThemeUI(initialTheme);
 
   if (toggleBtn) {
     toggleBtn.addEventListener('click', () => {
@@ -74,38 +92,41 @@
 
     // Nav frosted backdrop on scroll
     if (nav) {
-      if (scrollY > 24) {
+      if (scrollY > 20) {
         nav.classList.add('nav--scrolled');
       } else {
         nav.classList.remove('nav--scrolled');
       }
     }
 
-    // Subtle Hero scroll parallax & fade
-    if (heroVisual && motionOk()) {
+    // Subtle Hero scroll parallax & fade (desktop only)
+    if (heroVisual && motionOk() && window.innerWidth > 768) {
       if (scrollY < window.innerHeight) {
         const offset = scrollY * 0.12;
         const opacity = Math.max(0, 1 - scrollY / (window.innerHeight * 0.95));
         heroVisual.style.transform = `translate3d(0, ${offset.toFixed(1)}px, 0)`;
         heroVisual.style.opacity = opacity.toFixed(2);
       }
+    } else if (heroVisual && window.innerWidth <= 768) {
+      heroVisual.style.transform = '';
+      heroVisual.style.opacity = '';
     }
 
-    // Work item visual parallax on scroll
-    if (motionOk()) {
+    // Work item visual parallax on scroll (large screens only)
+    if (motionOk() && window.innerWidth > 768) {
       updateWorkParallax();
     }
   }
 
 
   /* -----------------------------------------------------------------------
-     4. Active Navigation Indicator via Scroll Spy
+     4. Active Navigation Indicator via Scroll Spy (with ARIA Current)
      ----------------------------------------------------------------------- */
   const navLinks = qsa('[data-nav-link]');
   const trackedSections = qsa('section[id]');
 
   function updateActiveNav() {
-    const scrollPos = window.scrollY + 120;
+    const scrollPos = window.scrollY + 140;
 
     let currentSectionId = '';
     trackedSections.forEach(sec => {
@@ -120,8 +141,10 @@
       const href = link.getAttribute('href');
       if (href === '#' + currentSectionId) {
         link.classList.add('is-active');
+        link.setAttribute('aria-current', 'page');
       } else {
         link.classList.remove('is-active');
+        link.removeAttribute('aria-current');
       }
     });
   }
@@ -149,11 +172,11 @@
 
 
   /* -----------------------------------------------------------------------
-     6. Magnetic CTA Buttons
+     6. Magnetic CTA Buttons (Fine-pointer/Desktop only)
      ----------------------------------------------------------------------- */
   const magneticButtons = qsa('[data-magnetic]');
 
-  if (motionOk()) {
+  if (motionOk() && hasFinePointer()) {
     magneticButtons.forEach(btn => {
       const text = qs('.btn__text', btn);
 
@@ -255,7 +278,7 @@
 
 
   /* -----------------------------------------------------------------------
-     9. Responsive Mobile Menu
+     9. Responsive Mobile Menu (with Accessible Focus Management)
      ----------------------------------------------------------------------- */
   const burger      = qs('#navBurger');
   const mobileMenu  = qs('#mobileMenu');
@@ -264,16 +287,21 @@
   function openMobileMenu() {
     burger.classList.add('is-active');
     burger.setAttribute('aria-expanded', 'true');
-    burger.setAttribute('aria-label', 'Close menu');
+    burger.setAttribute('aria-label', 'Close navigation menu');
     mobileMenu.classList.add('is-open');
     mobileMenu.setAttribute('aria-hidden', 'false');
     body.style.overflow = 'hidden';
+
+    // Accessibility: Focus first menu link
+    if (mobileLinks.length > 0) {
+      setTimeout(() => mobileLinks[0].focus(), 100);
+    }
   }
 
   function closeMobileMenu() {
     burger.classList.remove('is-active');
     burger.setAttribute('aria-expanded', 'false');
-    burger.setAttribute('aria-label', 'Open menu');
+    burger.setAttribute('aria-label', 'Open navigation menu');
     mobileMenu.classList.remove('is-open');
     mobileMenu.setAttribute('aria-hidden', 'true');
     body.style.overflow = '';
@@ -284,8 +312,14 @@
       mobileMenu.classList.contains('is-open') ? closeMobileMenu() : openMobileMenu();
     });
 
-    mobileLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+    mobileLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        closeMobileMenu();
+        burger.focus();
+      });
+    });
 
+    // Trap Escape key
     document.addEventListener('keydown', e => {
       if (e.key === 'Escape' && mobileMenu.classList.contains('is-open')) {
         closeMobileMenu();
@@ -306,7 +340,7 @@
       if (!target) return;
 
       e.preventDefault();
-      const navOffset = 64;
+      const navOffset = window.innerWidth <= 768 ? 56 : 64;
       const targetTop = target.getBoundingClientRect().top + window.scrollY - navOffset;
 
       window.scrollTo({
@@ -333,6 +367,7 @@
       const dpr  = Math.min(window.devicePixelRatio || 1, 2);
       W = rect.width;
       H = rect.height;
+      if (W === 0 || H === 0) return;
       canvas.width  = W * dpr;
       canvas.height = H * dpr;
       canvas.style.width  = W + 'px';
@@ -344,7 +379,6 @@
       return html.getAttribute('data-theme') === 'dark';
     }
 
-    // Color definitions
     function getColors() {
       const dark = isDarkMode();
       return {
@@ -354,25 +388,22 @@
         planeFill:   dark ? 'rgba(197, 173, 125, 0.05)'  : 'rgba(173, 149, 104, 0.045)',
         accentLine:  dark ? 'rgba(197, 173, 125, 0.65)'  : 'rgba(173, 149, 104, 0.55)',
         accentDot:   dark ? 'rgba(197, 173, 125, 0.85)'  : 'rgba(173, 149, 104, 0.80)',
-        text:        dark ? 'rgba(163, 163, 155, 0.50)'  : 'rgba(133, 132, 126, 0.60)',
+        text:        dark ? 'rgba(163, 163, 155, 0.50)'  : 'rgba(104, 103, 98, 0.65)',
         elevationArc:dark ? 'rgba(197, 173, 125, 0.22)'  : 'rgba(173, 149, 104, 0.18)'
       };
     }
 
-    // 3D Isometric Projection Helper
     function projectIso(x, y, z, cx, cy, rotY, rotX) {
-      // Rotation about Y axis
       const cosY = Math.cos(rotY), sinY = Math.sin(rotY);
       const x1 = x * cosY + z * sinY;
       const z1 = -x * sinY + z * cosY;
 
-      // Rotation about X axis
       const cosX = Math.cos(rotX), sinX = Math.sin(rotX);
       const y2 = y * cosX - z1 * sinX;
       const z2 = y * sinX + z1 * cosX;
 
-      // Isometric scale
-      const scale = 1.15;
+      // Responsive scale relative to viewport width
+      const scale = W < 480 ? 0.78 : (W < 768 ? 0.95 : 1.15);
       return {
         px: cx + x1 * scale,
         py: cy + y2 * scale,
@@ -392,18 +423,17 @@
       const cx = W * 0.5;
       const cy = H * 0.5;
 
-      // Subtle dynamic camera rotation angles
+      // Dynamic rotation angles
       const rotY = Math.PI / 6 + (mouseX - 0.5) * 0.35 + Math.sin(t * 0.15) * 0.06;
       const rotX = Math.PI / 7 + (mouseY - 0.5) * 0.25 + Math.cos(t * 0.12) * 0.04;
 
       // 1. Draw Architectural Floor Grid (Base Datum)
-      const gridSize = 220;
-      const gridStep = 44;
+      const gridSize = W < 480 ? 150 : 220;
+      const gridStep = W < 480 ? 30 : 44;
       ctx.strokeStyle = clrs.grid;
       ctx.lineWidth = 0.8;
 
       for (let i = -gridSize; i <= gridSize; i += gridStep) {
-        // Lines parallel to X
         const p1 = projectIso(-gridSize, 70, i, cx, cy, rotY, rotX);
         const p2 = projectIso(gridSize, 70, i, cx, cy, rotY, rotX);
         ctx.beginPath();
@@ -411,7 +441,6 @@
         ctx.lineTo(p2.px, p2.py);
         ctx.stroke();
 
-        // Lines parallel to Z
         const p3 = projectIso(i, 70, -gridSize, cx, cy, rotY, rotX);
         const p4 = projectIso(i, 70, gridSize, cx, cy, rotY, rotX);
         ctx.beginPath();
@@ -436,9 +465,7 @@
       ctx.setLineDash([]);
 
       // 3. Layered Architectural Volumes & Cantilevered Planes
-      // Slabs defined by 3D corners [x, y, z]
       const slabs = [
-        // Base Foundation Plate (large, thin, grounded)
         {
           corners: [
             [-120, 50, -90], [120, 50, -90],
@@ -448,7 +475,6 @@
           fill: clrs.planeFill,
           stroke: clrs.wireframe
         },
-        // Mid Cantilever Volume (shifted, elevated)
         {
           corners: [
             [-70, -10, -110], [90, -10, -110],
@@ -458,7 +484,6 @@
           fill: clrs.planeFill,
           stroke: clrs.wireframe
         },
-        // Upper Pavilion Roof Plate (floating high, champagne accented)
         {
           corners: [
             [-100, -70, -40], [60, -70, -40],
@@ -470,7 +495,6 @@
         }
       ];
 
-      // Vertical structural columns connecting slabs
       const columns = [
         [[-70, 50, -70], [-70, -70, -70]],
         [[50, 50, -40],  [50, -70, -40]],
@@ -478,7 +502,6 @@
         [[40, 50, 40],   [40, -70, 40]]
       ];
 
-      // Draw structural vertical lines
       ctx.strokeStyle = clrs.wireframe;
       ctx.lineWidth = 0.9;
       columns.forEach(col => {
@@ -490,7 +513,6 @@
         ctx.stroke();
       });
 
-      // Draw Slabs
       slabs.forEach(slab => {
         const pts = slab.corners.map(c => projectIso(c[0], c[1], c[2], cx, cy, rotY, rotX));
 
@@ -508,7 +530,6 @@
         ctx.lineWidth = 1;
         ctx.stroke();
 
-        // Highlight one structural edge in Champagne Gold
         const eIdx = slab.accentEdge;
         const pA = pts[eIdx];
         const pB = pts[(eIdx + 1) % pts.length];
@@ -519,23 +540,24 @@
         ctx.lineTo(pB.px, pB.py);
         ctx.stroke();
 
-        // Small architectural node markers
         ctx.fillStyle = clrs.accentDot;
         ctx.beginPath();
         ctx.arc(pA.px, pA.py, 2, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // 4. Subtle Concentric Golden-Ratio Elevation Arc
+      // 4. Concentric Elevation Arc
       const arcCenter = projectIso(0, 0, 0, cx, cy, rotY, rotX);
+      const arcR1 = W < 480 ? 90 : 130;
+      const arcR2 = W < 480 ? 55 : 80;
       ctx.strokeStyle = clrs.elevationArc;
       ctx.lineWidth = 0.8;
       ctx.setLineDash([3, 5]);
       ctx.beginPath();
-      ctx.arc(arcCenter.px, arcCenter.py, 130, -Math.PI * 0.7, Math.PI * 0.35);
+      ctx.arc(arcCenter.px, arcCenter.py, arcR1, -Math.PI * 0.7, Math.PI * 0.35);
       ctx.stroke();
       ctx.beginPath();
-      ctx.arc(arcCenter.px, arcCenter.py, 80, Math.PI * 0.2, Math.PI * 1.1);
+      ctx.arc(arcCenter.px, arcCenter.py, arcR2, Math.PI * 0.2, Math.PI * 1.1);
       ctx.stroke();
       ctx.setLineDash([]);
 
@@ -552,12 +574,25 @@
       }
     }
 
-    document.addEventListener('mousemove', e => {
-      targetMouseX = e.clientX / window.innerWidth;
-      targetMouseY = e.clientY / window.innerHeight;
+    if (hasFinePointer()) {
+      document.addEventListener('mousemove', e => {
+        targetMouseX = e.clientX / window.innerWidth;
+        targetMouseY = e.clientY / window.innerHeight;
+      }, { passive: true });
+    }
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        resizeCanvas();
+        updateScrollProgress();
+      }, 100);
     }, { passive: true });
 
-    window.addEventListener('resize', resizeCanvas, { passive: true });
+    window.addEventListener('orientationchange', () => {
+      setTimeout(resizeCanvas, 200);
+    });
 
     resizeCanvas();
     if (motionOk()) {
@@ -583,7 +618,6 @@
     }
   }, { passive: true });
 
-  // Initial call
   updateScrollProgress();
   updateActiveNav();
 
