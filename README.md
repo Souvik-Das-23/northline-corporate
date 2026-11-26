@@ -111,4 +111,5 @@ Right-click `index.html` and select **"Open with Live Server"**.
 
 ## License
 
-Private corporate property of **NORTHLINE**. All rights reserved.
+Private corporate property of **ANABHAY VENTURES**. All rights reserved.
+
